@@ -1,0 +1,2962 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Taaka — Plateforme Nationale de Recherche Scientifique du Bénin (Vert)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:wght@300;400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --noir: #1a6b45;
+    --noir-doux: #0d4229;
+    --noir-clair: #e8f5ee;
+    --jaune: #f5c800;
+    --jaune-clair: #fffbe6;
+    --jaune-sombre: #d4a017;
+    --rouge: #c0392b;
+    --gris: #f4f4f0;
+    --gris-bord: #e0ddd5;
+    --texte: #1c1c18;
+    --texte-muted: #6b6860;
+    --blanc: #ffffff;
+    --ombre: 0 2px 12px rgba(0,0,0,0.08);
+    --radius: 10px;
+    --font-titre: 'Bitter', Georgia, serif;
+    --font-corps: 'Source Sans 3', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--font-corps);
+    background: #fafaf7;
+    color: var(--texte);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  /* ===== NAVIGATION ===== */
+  nav {
+    background: var(--noir);
+    border-bottom: 3px solid var(--jaune);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    height: 66px;
+    gap: 1.5rem;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  /* Logo SVG livre ouvert style Taaka */
+  .nav-logo-icone {
+    width: 44px; height: 44px;
+    background: var(--jaune);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .nav-logo-icone svg { width: 26px; height: 26px; }
+
+  .nav-logo-texte {
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+    gap: 2px;
+  }
+
+  .nav-logo-nom {
+    font-family: var(--font-corps);
+    font-size: 1.6rem;
+    color: var(--blanc);
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  .nav-logo-nom span { color: var(--jaune); }
+
+  .nav-logo-tagline {
+    font-size: 0.58rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+  }
+
+  .nav-recherche {
+    flex: 1;
+    max-width: 480px;
+    display: flex;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .nav-recherche:focus-within { border-color: var(--jaune); }
+
+  .nav-recherche input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 0 14px;
+    font-family: var(--font-corps);
+    font-size: 0.88rem;
+    color: white;
+    outline: none;
+  }
+
+  .nav-recherche input::placeholder { color: rgba(255,255,255,0.45); }
+
+  .nav-recherche button {
+    background: var(--jaune);
+    border: none;
+    padding: 0 16px;
+    cursor: pointer;
+    color: var(--noir);
+    font-size: 0.85rem;
+    font-weight: 700;
+    transition: background 0.2s;
+    font-family: var(--font-corps);
+  }
+
+  .nav-recherche button:hover { background: var(--jaune-sombre); }
+
+  /* Menu hamburger mobile */
+  .nav-hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    padding: 6px;
+    margin-left: auto;
+    background: transparent;
+    border: none;
+  }
+
+  .nav-hamburger span {
+    display: block;
+    width: 22px; height: 2px;
+    background: white;
+    border-radius: 2px;
+    transition: all 0.3s;
+  }
+
+  .nav-liens {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin-left: auto;
+  }
+
+  .nav-lien {
+    text-decoration: none;
+    color: rgba(255,255,255,0.75);
+    font-size: 0.875rem;
+    font-weight: 600;
+    padding: 4px 0;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .nav-lien:hover, .nav-lien.actif { color: var(--jaune); border-bottom-color: var(--jaune); }
+
+  /* Drawer mobile */
+  .nav-drawer {
+    display: none;
+    position: fixed;
+    top: 66px; left: 0; right: 0;
+    background: var(--noir);
+    border-bottom: 3px solid var(--jaune);
+    padding: 1rem 1.5rem 1.5rem;
+    z-index: 99;
+    flex-direction: column;
+    gap: 0;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  }
+
+  .nav-drawer.ouvert { display: flex; }
+
+  .nav-drawer .nav-lien {
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    font-size: 1rem;
+  }
+
+  .nav-drawer .nav-lien:last-child { border-bottom: none; }
+
+  .nav-drawer-search {
+    display: flex;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+  }
+
+  .nav-drawer-search input {
+    flex: 1; border: none; background: transparent;
+    padding: 10px 14px; color: white; font-size: 0.9rem;
+    font-family: var(--font-corps); outline: none;
+  }
+
+  .nav-drawer-search input::placeholder { color: rgba(255,255,255,0.4); }
+
+  .nav-drawer-search button {
+    background: var(--jaune); border: none; padding: 0 16px;
+    color: var(--noir); font-weight: 700; cursor: pointer;
+    font-family: var(--font-corps); font-size: 0.85rem;
+  }
+
+  /* ===== BOUTONS ===== */
+  .btn {
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-family: var(--font-corps);
+    font-size: 0.875rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .btn-primaire { background: var(--jaune); color: var(--noir); }
+  .btn-primaire:hover { background: var(--jaune-sombre); transform: translateY(-1px); }
+  .btn-secondaire { background: transparent; color: var(--noir); border: 1.5px solid var(--gris-bord); }
+  .btn-secondaire:hover { background: var(--gris); }
+  .btn-noir { background: var(--noir); color: white; }
+  .btn-noir:hover { background: var(--noir-doux); transform: translateY(-1px); }
+
+  /* ===== PAGES (SPA) ===== */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* ===== HERO ===== */
+  .hero {
+    background: var(--noir);
+    color: white;
+    padding: 5rem 2rem 4rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle at 15% 60%, rgba(245,200,0,0.07) 0%, transparent 50%),
+                      radial-gradient(circle at 85% 20%, rgba(245,200,0,0.05) 0%, transparent 40%);
+  }
+
+  .hero-contenu { position: relative; max-width: 780px; margin: 0 auto; }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(245,200,0,0.15);
+    border: 1px solid rgba(245,200,0,0.35);
+    color: var(--jaune);
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-nom {
+    font-family: var(--font-corps);
+    font-size: clamp(4rem, 12vw, 7rem);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: white;
+    display: block;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .hero-nom span { color: var(--jaune); }
+
+  .hero-sous-titre {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+    display: block;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero h1 {
+    font-family: var(--font-titre);
+    font-size: clamp(1.3rem, 3vw, 1.8rem);
+    line-height: 1.3;
+    margin-bottom: 1rem;
+    font-weight: 400;
+    opacity: 0.9;
+  }
+
+  .hero h1 em { color: var(--jaune); font-style: normal; font-weight: 700; }
+
+  .hero p {
+    font-size: 1rem;
+    opacity: 0.7;
+    max-width: 560px;
+    margin: 0 auto 2.5rem;
+    line-height: 1.7;
+  }
+
+  .hero-recherche {
+    display: flex;
+    max-width: 620px;
+    margin: 0 auto 2rem;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+  }
+
+  .hero-recherche input {
+    flex: 1;
+    border: none;
+    padding: 15px 18px;
+    font-size: 0.95rem;
+    font-family: var(--font-corps);
+    color: var(--texte);
+    outline: none;
+    min-width: 0;
+  }
+
+  .hero-recherche button {
+    background: var(--jaune);
+    border: none;
+    padding: 0 24px;
+    color: var(--noir);
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-family: var(--font-corps);
+    white-space: nowrap;
+  }
+
+  .hero-recherche button:hover { background: var(--jaune-sombre); }
+
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    flex-wrap: wrap;
+  }
+
+  .hero-stat .chiffre {
+    font-family: var(--font-titre);
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--jaune);
+    display: block;
+  }
+
+  .hero-stat .label { font-size: 0.82rem; opacity: 0.6; }
+
+  /* ===== DISCIPLINES ===== */
+  .disciplines-section { padding: 3rem 2rem; max-width: 1200px; margin: 0 auto; }
+
+  .section-titre {
+    font-family: var(--font-titre);
+    font-size: 1.6rem;
+    color: var(--noir);
+    margin-bottom: 0.5rem;
+  }
+
+  .section-sous-titre { color: var(--texte-muted); margin-bottom: 1.5rem; font-size: 0.95rem; }
+
+  .grille-disciplines {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  .carte-discipline {
+    background: var(--blanc);
+    border: 1px solid var(--gris-bord);
+    border-radius: var(--radius);
+    padding: 1.25rem 1rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .carte-discipline:hover {
+    border-color: var(--noir);
+    box-shadow: var(--ombre);
+    transform: translateY(-2px);
+    border-bottom: 3px solid var(--jaune);
+  }
+
+  .carte-discipline .icone { font-size: 1.8rem; margin-bottom: 8px; display: block; }
+  .carte-discipline .nom { font-size: 0.83rem; font-weight: 600; color: var(--texte); display: block; }
+  .carte-discipline .sous-nom { font-size: 0.71rem; color: var(--texte-muted); display: block; margin-top: 2px; line-height: 1.3; }
+  .carte-discipline .nb { font-size: 0.73rem; color: var(--texte-muted); display: block; margin-top: 4px; font-family: var(--font-mono); }
+
+  /* ===== PUBLICATIONS ===== */
+  .publications-section { padding: 2rem 2rem 3rem; max-width: 1200px; margin: 0 auto; }
+
+  .pubs-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem; }
+
+  .grille-pubs {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+  }
+
+  .carte-pub {
+    background: var(--blanc);
+    border: 1px solid var(--gris-bord);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-top: 3px solid transparent;
+  }
+
+  .carte-pub:hover {
+    box-shadow: 0 6px 24px rgba(0,0,0,0.1);
+    border-top-color: var(--jaune);
+    transform: translateY(-2px);
+  }
+
+  .pub-type {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 3px 10px;
+    border-radius: 20px;
+    width: fit-content;
+  }
+
+  .type-article { background: #e8f0fe; color: #1a56db; }
+  .type-these { background: #fce8e6; color: #c0392b; }
+  .type-memoire { background: #fafae0; color: #7a6e00; }
+  .type-rapport { background: #f0f0f0; color: #444; }
+
+  .pub-titre { font-family: var(--font-titre); font-size: 1.02rem; font-weight: 600; color: var(--texte); line-height: 1.4; }
+  .pub-auteur { font-size: 0.85rem; color: var(--noir); font-weight: 700; }
+
+  .pub-meta { display: flex; gap: 12px; font-size: 0.78rem; color: var(--texte-muted); flex-wrap: wrap; }
+  .pub-meta span { display: flex; align-items: center; gap: 4px; }
+
+  .pub-resume { font-size: 0.875rem; color: var(--texte-muted); line-height: 1.6; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; }
+
+  .pub-mots-cles { display: flex; gap: 6px; flex-wrap: wrap; }
+
+  .mot-cle {
+    background: var(--gris);
+    border: 1px solid var(--gris-bord);
+    padding: 2px 9px;
+    border-radius: 20px;
+    font-size: 0.73rem;
+    color: var(--texte-muted);
+  }
+
+  .pub-stats {
+    display: flex;
+    gap: 14px;
+    font-size: 0.78rem;
+    color: var(--texte-muted);
+    padding-top: 8px;
+    border-top: 1px solid var(--gris-bord);
+    margin-top: auto;
+  }
+
+  /* ===== PAGE RECHERCHE ===== */
+  .recherche-page { display: grid; grid-template-columns: 270px 1fr; gap: 2rem; max-width: 1200px; margin: 0 auto; padding: 2rem; }
+
+  .filtres-sidebar {
+    background: var(--blanc);
+    border: 1px solid var(--gris-bord);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    height: fit-content;
+    position: sticky;
+    top: 82px;
+  }
+
+  .filtres-sidebar h3 { font-size: 0.95rem; color: var(--texte); margin-bottom: 1rem; padding-bottom: 8px; border-bottom: 2px solid var(--jaune); font-weight: 700; }
+
+  .filtre-groupe { margin-bottom: 1.2rem; }
+  .filtre-groupe label { display: block; font-size: 0.78rem; font-weight: 700; color: var(--texte-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+
+  .filtre-groupe select, .filtre-groupe input[type=text] {
+    width: 100%; padding: 8px 12px;
+    border: 1px solid var(--gris-bord); border-radius: 8px;
+    font-family: var(--font-corps); font-size: 0.875rem; color: var(--texte);
+    background: var(--blanc); outline: none; transition: border-color 0.2s;
+  }
+
+  .filtre-groupe select:focus, .filtre-groupe input[type=text]:focus { border-color: var(--noir); }
+
+  .checkbox-groupe { display: flex; flex-direction: column; gap: 6px; }
+
+  .checkbox-groupe label {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 0.85rem; color: var(--texte); cursor: pointer;
+    font-weight: 400; text-transform: none; letter-spacing: normal;
+  }
+
+  .checkbox-groupe input[type=checkbox] { accent-color: var(--noir); width: 14px; height: 14px; }
+
+  /* Filtres toggle mobile */
+  .filtres-toggle {
+    display: none;
+    width: 100%;
+    padding: 10px 16px;
+    background: var(--noir);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-family: var(--font-corps);
+    font-weight: 700;
+    font-size: 0.875rem;
+    cursor: pointer;
+    margin-bottom: 1rem;
+    align-items: center;
+    gap: 8px;
+    justify-content: center;
+  }
+
+  .resultats-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 12px; border-bottom: 1px solid var(--gris-bord); flex-wrap: wrap; gap: 8px; }
+
+  .resultats-nb { font-weight: 600; color: var(--texte); font-size: 0.95rem; }
+  .resultats-nb span { color: var(--noir); font-family: var(--font-titre); }
+
+  .tri-select { padding: 6px 10px; border: 1px solid var(--gris-bord); border-radius: 6px; font-size: 0.85rem; font-family: var(--font-corps); }
+
+  .liste-resultats { display: flex; flex-direction: column; gap: 16px; }
+
+  .resultat-item {
+    background: var(--blanc); border: 1px solid var(--gris-bord);
+    border-radius: var(--radius); padding: 1.5rem; cursor: pointer;
+    transition: all 0.2s; border-left: 3px solid transparent;
+  }
+
+  .resultat-item:hover { border-left-color: var(--jaune); box-shadow: var(--ombre); }
+
+  /* ===== PAGE PUBLICATION ===== */
+  .pub-detail { max-width: 900px; margin: 0 auto; padding: 2rem; }
+
+  .pub-detail-header { background: var(--blanc); border: 1px solid var(--gris-bord); border-top: 4px solid var(--jaune); border-radius: var(--radius); padding: 2rem; margin-bottom: 1.5rem; }
+
+  .pub-detail h1 { font-family: var(--font-titre); font-size: 1.7rem; color: var(--noir); line-height: 1.3; margin-bottom: 1rem; }
+
+  .pub-detail-meta { display: flex; gap: 1rem; flex-wrap: wrap; margin: 1rem 0; }
+
+  .meta-chip { background: var(--gris); border: 1px solid var(--gris-bord); padding: 4px 12px; border-radius: 6px; font-size: 0.8rem; color: var(--texte-muted); display: flex; align-items: center; gap: 5px; }
+
+  .pub-detail-actions { display: flex; gap: 12px; margin-top: 1.5rem; flex-wrap: wrap; }
+
+  .pdf-viewer {
+    background: var(--blanc); border: 1px solid var(--gris-bord); border-radius: var(--radius);
+    padding: 2rem; margin-bottom: 1.5rem; text-align: center; min-height: 360px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
+    color: var(--texte-muted);
+    background: repeating-linear-gradient(45deg, var(--gris), var(--gris) 10px, var(--blanc) 10px, var(--blanc) 20px);
+  }
+
+  .citation-box { background: var(--jaune-clair); border: 1px solid var(--jaune); border-left: 4px solid var(--jaune); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1.5rem; }
+
+  .citation-box h4 { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--noir); font-weight: 700; margin-bottom: 8px; }
+
+  .citation-texte { font-family: var(--font-mono); font-size: 0.82rem; color: var(--texte); line-height: 1.7; white-space: pre-wrap; word-break: break-word; }
+
+  /* ===== PROFIL ===== */
+  .profil-page { max-width: 1000px; margin: 0 auto; padding: 2rem; }
+
+  .profil-header {
+    background: var(--noir);
+    border-bottom: 4px solid var(--jaune);
+    border-radius: var(--radius);
+    padding: 2.5rem;
+    color: white;
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .profil-avatar {
+    width: 90px; height: 90px;
+    background: var(--jaune);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-titre); font-size: 2rem; font-weight: 700;
+    flex-shrink: 0; color: var(--noir);
+  }
+
+  .profil-info h2 { font-family: var(--font-titre); font-size: 1.6rem; margin-bottom: 6px; }
+  .profil-institution { opacity: 0.7; font-size: 0.9rem; margin-bottom: 1rem; }
+  .profil-stats { display: flex; gap: 2rem; flex-wrap: wrap; }
+  .profil-stat .val { font-family: var(--font-titre); font-size: 1.6rem; font-weight: 700; color: var(--jaune); }
+  .profil-stat .lab { font-size: 0.78rem; opacity: 0.7; }
+
+  /* ===== DÉPÔT ===== */
+  .depot-page { max-width: 780px; margin: 0 auto; padding: 2rem; }
+
+  .depot-page h1 { font-family: var(--font-titre); font-size: 1.8rem; color: var(--noir); margin-bottom: 0.5rem; }
+
+  .formulaire { background: var(--blanc); border: 1px solid var(--gris-bord); border-radius: var(--radius); padding: 2rem; margin-top: 1.5rem; display: flex; flex-direction: column; gap: 1.2rem; }
+
+  .champ { display: flex; flex-direction: column; gap: 6px; }
+  .champ label { font-size: 0.85rem; font-weight: 700; color: var(--texte); }
+  .champ label span { color: var(--rouge); margin-left: 2px; }
+
+  .champ input[type=text], .champ input[type=date], .champ input[type=email], .champ select, .champ textarea {
+    padding: 10px 14px; border: 1.5px solid var(--gris-bord); border-radius: 8px;
+    font-family: var(--font-corps); font-size: 0.9rem; color: var(--texte);
+    outline: none; transition: border-color 0.2s; background: var(--blanc);
+  }
+
+  .champ input:focus, .champ select:focus, .champ textarea:focus { border-color: var(--noir); }
+  .champ textarea { resize: vertical; min-height: 120px; }
+
+  .zone-upload {
+    border: 2px dashed var(--gris-bord); border-radius: var(--radius);
+    padding: 2.5rem; text-align: center; cursor: pointer;
+    transition: all 0.2s; background: var(--gris);
+  }
+
+  .zone-upload:hover { border-color: var(--noir); background: var(--jaune-clair); }
+  .zone-upload .icone-upload { font-size: 2.5rem; margin-bottom: 10px; display: block; }
+  .zone-upload p { font-size: 0.9rem; color: var(--texte-muted); }
+  .zone-upload strong { color: var(--noir); }
+
+  .champs-deux-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+  .etapes-depot {
+    display: flex; justify-content: center; gap: 0; margin-bottom: 2rem;
+    background: var(--blanc); border: 1px solid var(--gris-bord); border-radius: var(--radius);
+    overflow: hidden; padding: 1.25rem 1rem; flex-wrap: wrap;
+  }
+
+  .etape { display: flex; align-items: center; gap: 8px; flex: 1; padding: 0.4rem 0; opacity: 0.4; font-size: 0.8rem; font-weight: 600; position: relative; justify-content: center; min-width: 110px; }
+  .etape.active { opacity: 1; color: var(--noir); }
+  .etape.done { opacity: 0.7; color: var(--noir); }
+  .etape-nb { width: 24px; height: 24px; border-radius: 50%; background: var(--gris-bord); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; color: var(--texte-muted); flex-shrink: 0; }
+  .etape.active .etape-nb { background: var(--jaune); color: var(--noir); }
+  .etape.done .etape-nb { background: var(--noir); color: white; }
+  .etape:not(:last-child)::after { content: '→'; position: absolute; right: -6px; color: var(--gris-bord); font-size: 0.9rem; }
+
+  /* ===== AUTH ===== */
+  .auth-tabs { display: flex; background: var(--gris); border-radius: 8px; padding: 4px; margin-bottom: 1.5rem; gap: 4px; }
+
+  .auth-tab { flex: 1; padding: 8px; text-align: center; font-size: 0.85rem; font-weight: 600; border-radius: 6px; cursor: pointer; transition: all 0.2s; color: var(--texte-muted); border: none; background: transparent; font-family: var(--font-corps); }
+
+  .auth-tab.actif { background: var(--noir); color: white; }
+
+  /* ===== DASHBOARD ===== */
+  .dashboard { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+
+  .stats-grille { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 2rem; }
+
+  .stat-card { background: var(--blanc); border: 1px solid var(--gris-bord); border-top: 3px solid var(--jaune); border-radius: var(--radius); padding: 1.5rem; display: flex; flex-direction: column; gap: 8px; }
+
+  .stat-card .etiquette { font-size: 0.78rem; color: var(--texte-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+  .stat-card .valeur { font-family: var(--font-titre); font-size: 2.1rem; font-weight: 700; color: var(--noir); }
+  .stat-card .tendance { font-size: 0.8rem; color: #137333; font-weight: 600; }
+
+  .admin-tabs { display: flex; gap: 4px; border-bottom: 2px solid var(--gris-bord); margin-bottom: 1.5rem; flex-wrap: wrap; }
+
+  .admin-tab { padding: 10px 18px; font-size: 0.85rem; font-weight: 600; cursor: pointer; color: var(--texte-muted); background: none; border: none; border-bottom: 3px solid transparent; margin-bottom: -2px; font-family: var(--font-corps); transition: all 0.2s; white-space: nowrap; }
+
+  .admin-tab:hover { color: var(--texte); }
+  .admin-tab.actif { color: var(--noir); border-bottom-color: var(--jaune); }
+
+  .table-admin { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+
+  .table-admin th { text-align: left; padding: 10px 14px; background: var(--gris); font-size: 0.76rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--texte-muted); border-bottom: 2px solid var(--gris-bord); }
+
+  .table-admin td { padding: 12px 14px; border-bottom: 1px solid var(--gris-bord); color: var(--texte); vertical-align: middle; }
+
+  .table-admin tr:hover td { background: var(--gris); }
+
+  .badge { padding: 3px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+
+  .badge-attente { background: #fff3e0; color: #c45e00; }
+  .badge-valide { background: #e6f4ea; color: #137333; }
+  .badge-rejete { background: #fce8e6; color: #c0392b; }
+  .badge-moderateur { background: #e8f0fe; color: #1a56db; }
+  .badge-reviewer { background: #f3e8ff; color: #7c3aed; }
+
+  /* ===== À PROPOS ===== */
+  .apropos { max-width: 900px; margin: 0 auto; padding: 3rem 2rem; }
+  .apropos h1 { font-family: var(--font-titre); font-size: 2rem; color: var(--noir); margin-bottom: 1rem; }
+  .apropos-section { margin-bottom: 2.5rem; }
+  .apropos-section h2 { font-family: var(--font-titre); font-size: 1.25rem; color: var(--noir); margin-bottom: 0.75rem; padding-bottom: 6px; border-bottom: 3px solid var(--jaune); display: inline-block; }
+  .apropos-section p { color: var(--texte-muted); line-height: 1.8; margin-bottom: 0.75rem; }
+
+  .partenaires-grille { display: grid; grid-template-columns: repeat(auto-fill, minmax(175px, 1fr)); gap: 12px; margin-top: 1rem; }
+
+  .partenaire-card { background: var(--blanc); border: 1px solid var(--gris-bord); border-radius: var(--radius); padding: 1.25rem; text-align: center; font-size: 0.85rem; font-weight: 600; color: var(--texte-muted); transition: all 0.2s; }
+
+  .partenaire-card:hover { border-color: var(--noir); color: var(--noir); border-bottom: 3px solid var(--jaune); }
+
+  /* ===== CLASSEMENT ===== */
+  .classement { max-width: 900px; margin: 0 auto; padding: 2rem; }
+
+  .top-auteur { display: flex; align-items: center; gap: 1rem; background: var(--blanc); border: 1px solid var(--gris-bord); border-radius: var(--radius); padding: 1rem 1.5rem; margin-bottom: 10px; transition: all 0.2s; cursor: pointer; }
+
+  .top-auteur:hover { border-color: var(--noir); box-shadow: var(--ombre); border-left: 3px solid var(--jaune); }
+
+  .rang { font-family: var(--font-titre); font-size: 1.5rem; font-weight: 700; color: var(--gris-bord); width: 36px; text-align: center; flex-shrink: 0; }
+
+  .rang-1 { color: var(--jaune); }
+  .rang-2 { color: #9e9e9e; }
+  .rang-3 { color: #cd7f32; }
+
+  .auteur-avatar { width: 46px; height: 46px; border-radius: 50%; background: var(--noir-clair); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1rem; color: var(--noir); flex-shrink: 0; }
+
+  .auteur-info { flex: 1; min-width: 0; }
+  .auteur-nom { font-weight: 700; color: var(--texte); }
+  .auteur-inst { font-size: 0.82rem; color: var(--texte-muted); }
+  .auteur-chiffres { text-align: right; flex-shrink: 0; }
+  .auteur-chiffres .pubs { font-family: var(--font-titre); font-size: 1.4rem; color: var(--noir); font-weight: 700; }
+  .auteur-chiffres .lab { font-size: 0.75rem; color: var(--texte-muted); }
+
+  /* ===== PAGES AIDE ===== */
+  .aide-page { max-width: 860px; margin: 0 auto; padding: 3rem 2rem; }
+  .aide-page h1 { font-family: var(--font-titre); font-size: 2rem; color: var(--noir); margin-bottom: 0.5rem; border-bottom: 4px solid var(--jaune); display: inline-block; padding-bottom: 4px; }
+  .aide-section { margin: 2rem 0; }
+  .aide-section h2 { font-family: var(--font-titre); font-size: 1.2rem; color: var(--noir); margin-bottom: 0.75rem; }
+  .aide-section p, .aide-section li { color: var(--texte-muted); line-height: 1.8; margin-bottom: 0.6rem; }
+  .aide-section ul, .aide-section ol { padding-left: 1.5rem; }
+  .aide-etape { display: flex; gap: 1rem; align-items: flex-start; background: var(--blanc); border: 1px solid var(--gris-bord); border-left: 4px solid var(--jaune); border-radius: 8px; padding: 1rem 1.25rem; margin-bottom: 10px; }
+  .aide-etape-nb { width: 28px; height: 28px; border-radius: 50%; background: var(--jaune); color: var(--noir); font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.85rem; margin-top: 1px; }
+  .aide-etape-texte strong { display: block; color: var(--noir); margin-bottom: 2px; font-size: 0.9rem; }
+  .aide-etape-texte span { font-size: 0.85rem; color: var(--texte-muted); }
+
+  /* ===== FOOTER ===== */
+  footer { background: var(--noir); color: rgba(255,255,255,0.8); padding: 3rem 2rem 1.5rem; margin-top: 4rem; }
+
+  .footer-grille { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 2rem; max-width: 1200px; margin: 0 auto 2rem; }
+
+  .footer-logo { font-family: var(--font-corps); font-size: 1.6rem; font-weight: 700; color: white; margin-bottom: 0.75rem; letter-spacing: 0.04em; }
+  .footer-logo span { color: var(--jaune); }
+  .footer-desc { font-size: 0.85rem; line-height: 1.7; opacity: 0.65; }
+
+  .footer-col h4 { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--jaune); margin-bottom: 12px; }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  .footer-col ul li a { color: rgba(255,255,255,0.65); text-decoration: none; font-size: 0.875rem; transition: color 0.2s; cursor: pointer; }
+  .footer-col ul li a:hover { color: white; }
+
+  .footer-bas { max-width: 1200px; margin: 0 auto; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; opacity: 0.5; flex-wrap: wrap; gap: 8px; }
+
+  /* ===== TOAST ===== */
+  .toast-container { position: fixed; bottom: 2rem; right: 2rem; z-index: 1000; display: flex; flex-direction: column; gap: 10px; }
+
+  .toast { background: var(--noir); color: white; padding: 12px 20px; border-radius: 10px; font-size: 0.875rem; box-shadow: 0 8px 24px rgba(0,0,0,0.25); animation: slideIn 0.3s ease; display: flex; align-items: center; gap: 8px; max-width: 340px; border-left: 3px solid var(--jaune); }
+
+  .toast.succes { background: #1a3d1a; border-left-color: #4caf50; }
+  .toast.erreur { background: #3d1a1a; border-left-color: var(--rouge); }
+
+  @keyframes slideIn { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: translateX(0); } }
+
+  /* ===== MODAL ===== */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 200; align-items: center; justify-content: center; padding: 1rem; }
+  .modal-overlay.ouvert { display: flex; }
+
+  .modal { background: var(--blanc); border-radius: 14px; padding: 2rem; max-width: 520px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 24px 64px rgba(0,0,0,0.3); border-top: 4px solid var(--jaune); }
+
+  .modal-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; }
+  .modal h3 { font-family: var(--font-titre); font-size: 1.3rem; color: var(--noir); }
+
+  .btn-fermer { background: var(--gris); border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
+  .btn-fermer:hover { background: var(--gris-bord); }
+
+  /* ===== UTILITAIRES ===== */
+  .breadcrumb { display: flex; gap: 8px; align-items: center; font-size: 0.82rem; color: var(--texte-muted); padding: 0.75rem 2rem; max-width: 1200px; margin: 0 auto; border-bottom: 1px solid var(--gris-bord); }
+  .breadcrumb a { color: var(--noir); text-decoration: none; cursor: pointer; font-weight: 600; }
+  .breadcrumb a:hover { text-decoration: underline; }
+  .breadcrumb span { opacity: 0.4; }
+
+  .page-header-bar { background: var(--noir); border-bottom: 3px solid var(--jaune); padding: 1.5rem 2rem 1.25rem; }
+  .page-header-bar h1 { font-family: var(--font-titre); font-size: 1.5rem; color: white; }
+  .page-header-bar p { color: rgba(255,255,255,0.55); font-size: 0.88rem; margin-top: 4px; }
+
+  /* ===== RESPONSIVE MOBILE ===== */
+  @media (max-width: 768px) {
+    /* Nav : masquer liens et barre de recherche desktop */
+    .nav-liens { display: none; }
+    .nav-recherche { display: none; }
+    .nav-hamburger { display: flex; }
+    nav { padding: 0 1rem; gap: 0.75rem; }
+    .nav-logo-tagline { display: none; }
+    .nav-logo-nom { font-size: 1.35rem; }
+
+    /* Recherche et filtres */
+    .recherche-page { grid-template-columns: 1fr; }
+    .filtres-sidebar { position: static; }
+    .filtres-toggle { display: flex; }
+    .filtres-sidebar-contenu { display: none; }
+    .filtres-sidebar-contenu.ouvert { display: block; }
+
+    /* Grilles */
+    .grille-pubs { grid-template-columns: 1fr; }
+    .footer-grille { grid-template-columns: 1fr 1fr; }
+    .champs-deux-cols { grid-template-columns: 1fr; }
+    .hero-stats { gap: 1.5rem; }
+    .pub-detail-actions { flex-direction: column; }
+    .admin-tabs { overflow-x: auto; padding-bottom: 4px; }
+
+    /* Hero */
+    .hero { padding: 3rem 1rem 2.5rem; }
+    .hero-nom { font-size: clamp(3rem, 15vw, 5rem); }
+
+    /* Profil */
+    .profil-header { flex-direction: column; }
+
+    /* Etapes dépôt */
+    .etape { min-width: 80px; }
+    .etapes-depot { padding: 1rem 0.5rem; }
+  }
+
+  @media (max-width: 480px) {
+    .footer-grille { grid-template-columns: 1fr; }
+    .hero-stats { gap: 1rem; }
+    .hero-stat .chiffre { font-size: 1.5rem; }
+    .hero-recherche { flex-direction: column; border-radius: 12px; }
+    .hero-recherche input { padding: 14px 16px; }
+    .hero-recherche button { padding: 12px; width: 100%; justify-content: center; }
+    .stat-card .valeur { font-size: 1.7rem; }
+    .table-admin { font-size: 0.8rem; }
+    .table-admin th, .table-admin td { padding: 8px 10px; }
+    .grille-disciplines { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
+  }
+
+  /* ===== BOUTON RETOUR ===== */
+  #btnRetour {
+    display: none;
+    position: fixed;
+    bottom: 2rem;
+    left: 2rem;
+    z-index: 90;
+    background: var(--noir);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 10px 20px;
+    font-family: var(--font-corps);
+    font-size: 0.875rem;
+    font-weight: 700;
+    cursor: pointer;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+    transition: all 0.2s;
+    border-left: 3px solid var(--jaune);
+  }
+  #btnRetour:hover { background: var(--noir-doux); transform: translateY(-2px); }
+
+  /* ===== LIEN AUTEUR CLIQUABLE ===== */
+  .lien-auteur {
+    cursor: pointer;
+    color: var(--noir);
+    font-weight: 700;
+    text-decoration: none;
+    border-bottom: 1px dashed var(--gris-bord);
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .lien-auteur:hover { color: var(--jaune-sombre); border-bottom-color: var(--jaune-sombre); }
+
+</style>
+</head>
+<body>
+
+<!-- ===== NAVIGATION ===== -->
+<nav>
+  <a class="nav-logo" onclick="afficherPage('accueil')">
+    <div class="nav-logo-icone">
+      <!-- Livre ouvert SVG fidèle au logo Taaka -->
+      <svg viewBox="0 0 28 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M14 4C11 1.5 7 1 3 2L2 2.5V19.5L3 19C7 18 11 18.5 14 21V4Z" fill="#0d4229"/>
+        <path d="M14 4C17 1.5 21 1 25 2L26 2.5V19.5L25 19C21 18 17 18.5 14 21V4Z" fill="#0d4229"/>
+        <path d="M14 4V21" stroke="#0d4229" stroke-width="1.2"/>
+        <path d="M14 4C11 1.5 7 1 3 2L2 2.5V19.5L3 19C7 18 11 18.5 14 21V4Z" stroke="#0d4229" stroke-width="0.5" fill="none"/>
+        <path d="M14 4C17 1.5 21 1 25 2L26 2.5V19.5L25 19C21 18 17 18.5 14 21V4Z" stroke="#0d4229" stroke-width="0.5" fill="none"/>
+        <!-- Pages lignes gauche -->
+        <line x1="5" y1="6" x2="12" y2="5" stroke="#f5c800" stroke-width="0.8" opacity="0.7"/>
+        <line x1="5" y1="9" x2="12" y2="8" stroke="#f5c800" stroke-width="0.8" opacity="0.7"/>
+        <line x1="5" y1="12" x2="12" y2="11" stroke="#f5c800" stroke-width="0.8" opacity="0.7"/>
+        <line x1="5" y1="15" x2="12" y2="14" stroke="#f5c800" stroke-width="0.8" opacity="0.7"/>
+        <!-- Pages lignes droite -->
+        <line x1="23" y1="6" x2="16" y2="5" stroke="#f5c800" stroke-width="0.8" opacity="0.7"/>
+        <line x1="23" y1="9" x2="16" y2="8" stroke="#f5c800" stroke-width="0.8" opacity="0.7"/>
+        <line x1="23" y1="12" x2="16" y2="11" stroke="#f5c800" stroke-width="0.8" opacity="0.7"/>
+        <line x1="23" y1="15" x2="16" y2="14" stroke="#f5c800" stroke-width="0.8" opacity="0.7"/>
+      </svg>
+    </div>
+    <div class="nav-logo-texte">
+      <span class="nav-logo-nom">Taak<span>a</span></span>
+      <span class="nav-logo-tagline">Recherche scientifique · Bénin</span>
+    </div>
+  </a>
+
+  <!-- Barre de recherche desktop -->
+  <div class="nav-recherche" id="navSearchBar">
+    <input type="text" placeholder="Rechercher articles, auteurs, disciplines..." id="navSearchInput" onkeydown="if(event.key==='Enter')lancerRecherche()">
+    <button onclick="lancerRecherche()">Rechercher</button>
+  </div>
+
+  <!-- Liens desktop -->
+  <div class="nav-liens">
+    <span class="nav-lien" onclick="afficherPage('recherche')">Explorer</span>
+    <span class="nav-lien" onclick="afficherPage('classement')">Classement</span>
+    <span class="nav-lien" onclick="afficherPage('guide')">Guide de dépôt</span>
+    <span class="nav-lien" onclick="afficherPage('politique')">Politique éditoriale</span>
+    <span class="nav-lien" onclick="afficherPage('apropos')">À propos</span>
+    <span id="navDepotLien" class="nav-lien" onclick="demanderDepot()" style="display:none">Déposer</span>
+    <span id="navDashboard" class="nav-lien" onclick="afficherPage('dashboard')" style="display:none">Admin</span>
+    <div id="navAuth">
+      <button class="btn btn-primaire" style="padding:7px 16px" onclick="ouvrirModal('modalConnexion')">Connexion</button>
+    </div>
+    <div id="navUser" style="display:none;align-items:center;gap:8px">
+      <button class="btn" style="background:var(--jaune);color:var(--noir);padding:6px 14px;font-size:0.82rem;font-weight:700" onclick="afficherMonProfil()">👤 <span id="navNomUser"></span></button>
+      <button class="btn" style="background:rgba(255,255,255,0.12);color:white;border:1px solid rgba(255,255,255,0.2);padding:6px 14px;font-size:0.82rem" onclick="deconnexion()">Déconnexion</button>
+    </div>
+  </div>
+
+  <!-- Hamburger mobile -->
+  <button class="nav-hamburger" id="hamburger" onclick="toggleDrawer()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Bouton retour -->
+<button id="btnRetour" onclick="retourPage()">← Retour</button>
+
+<!-- Drawer mobile -->
+<div class="nav-drawer" id="navDrawer">
+  <div class="nav-drawer-search">
+    <input type="text" placeholder="Rechercher..." id="mobileSearchInput" onkeydown="if(event.key==='Enter'){lancerRechercheMobile();toggleDrawer()}">
+    <button onclick="lancerRechercheMobile();toggleDrawer()">🔍</button>
+  </div>
+  <span class="nav-lien" onclick="afficherPage('recherche');toggleDrawer()">🔍 Explorer</span>
+  <span class="nav-lien" onclick="afficherPage('classement');toggleDrawer()">🏆 Classement</span>
+  <span class="nav-lien" onclick="afficherPage('guide');toggleDrawer()">📖 Guide de dépôt</span>
+  <span class="nav-lien" onclick="afficherPage('politique');toggleDrawer()">📋 Politique éditoriale</span>
+  <span class="nav-lien" onclick="afficherPage('apropos');toggleDrawer()">ℹ️ À propos</span>
+  <span id="drawerDepot" class="nav-lien" onclick="demanderDepot();toggleDrawer()" style="display:none">📤 Déposer</span>
+  <span id="drawerDashboard" class="nav-lien" onclick="afficherPage('dashboard');toggleDrawer()" style="display:none">⚙️ Admin</span>
+  <div id="drawerAuth" style="margin-top:8px">
+    <button class="btn btn-primaire" style="width:100%;justify-content:center" onclick="ouvrirModal('modalConnexion');toggleDrawer()">Connexion</button>
+  </div>
+  <div id="drawerUser" style="display:none;margin-top:8px;display:flex;flex-direction:column;gap:8px">
+    <button class="btn btn-primaire" style="width:100%;justify-content:center" onclick="afficherMonProfil();toggleDrawer()">👤 Mon profil</button>
+    <button class="btn" style="background:rgba(255,255,255,0.12);color:white;border:1px solid rgba(255,255,255,0.2);width:100%;justify-content:center" onclick="deconnexion();toggleDrawer()">Déconnexion</button>
+  </div>
+</div>
+
+<!-- ===== PAGE ACCUEIL ===== -->
+<div id="page-accueil" class="page active">
+
+  <div class="hero">
+    <div class="hero-contenu">
+      <div class="hero-badge"><svg width="18" height="13" viewBox="0 0 18 13" xmlns="http://www.w3.org/2000/svg" style="border-radius:2px;flex-shrink:0"><rect width="6" height="13" fill="#008751"/><rect x="6" width="12" height="6.5" fill="#FCD116"/><rect x="6" y="6.5" width="12" height="6.5" fill="#E8112D"/></svg> République du Bénin · Plateforme Nationale</div>
+      <span class="hero-nom">Taak<span>a</span></span>
+      <span class="hero-sous-titre">Plateforme nationale de recherche scientifique</span>
+      <h1>La science béninoise,<br><em>centralisée et accessible à tous</em></h1>
+      <p>Découvrez, publiez et valorisez les travaux scientifiques du Bénin. Une base de données centralisée pour chercheurs, étudiants et institutions.</p>
+      <div class="hero-recherche">
+        <input type="text" id="heroSearch" placeholder="Ex: agriculture durable, systèmes de santé, énergie solaire...">
+        <button onclick="lancerRecherche()">🔍 Rechercher</button>
+      </div>
+      <div style="display:flex;justify-content:center;gap:12px;flex-wrap:wrap">
+        <button class="btn btn-primaire" onclick="demanderDepot()">📤 Déposer un travail</button>
+        <button class="btn" style="background:rgba(255,255,255,0.12);color:white;border:1px solid rgba(255,255,255,0.25)" onclick="afficherPage('recherche')">Parcourir les publications</button>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><span class="chiffre">1 247</span><span class="label">Publications</span></div>
+        <div class="hero-stat"><span class="chiffre">384</span><span class="label">Chercheurs</span></div>
+        <div class="hero-stat"><span class="chiffre">23</span><span class="label">Institutions</span></div>
+        <div class="hero-stat"><span class="chiffre">18</span><span class="label">Disciplines</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="disciplines-section">
+    <h2 class="section-titre">Parcourir par discipline</h2>
+    <p class="section-sous-titre">Explorez les domaines de la recherche nationale</p>
+    <div class="grille-disciplines">
+      <div class="carte-discipline" onclick="filtrerDiscipline('Lettres et Sciences Humaines')"><span class="icone">📖</span><span class="nom">Lettres et Sciences Humaines (LSH)</span><span class="nb">218 publications</span></div>
+      <div class="carte-discipline" onclick="filtrerDiscipline('Sciences Économiques et de Gestion')"><span class="icone">📈</span><span class="nom">Sciences Économiques et de Gestion (SEG)</span><span class="nb">276 publications</span></div>
+      <div class="carte-discipline" onclick="filtrerDiscipline('Sciences Juridiques et Politiques')"><span class="icone">⚖️</span><span class="nom">Sciences Juridiques et Politiques (SJP)</span><span class="nb">156 publications</span></div>
+      <div class="carte-discipline" onclick="filtrerDiscipline('Mathématiques, Physique, Chimie')"><span class="icone">⚗️</span><span class="nom">Mathématiques, Physique, Chimie (MPC)</span><span class="nb">206 publications</span></div>
+      <div class="carte-discipline" onclick="filtrerDiscipline('Sciences Naturelles et Agronomie')"><span class="icone">🌿</span><span class="nom">Sciences Naturelles et Agronomie (SNA)</span><span class="nb">316 publications</span></div>
+      <div class="carte-discipline" onclick="filtrerDisciplineSTI()"><span class="icone">⚙️</span><span class="nom">Sciences et Techniques de l’Ingénieur (STI)</span><span class="nb">156 publications</span></div>
+      <div class="carte-discipline" onclick="filtrerDiscipline('Médecine, Pharmacie, Odontostomatologie, Médecine Vétérinaire')"><span class="icone">🏥</span><span class="nom">Médecine, Pharmacie, Odontostomatologie, Médecine Vétérinaire (MHPOMVPA)</span><span class="nb">214 publications</span></div>
+      <div class="carte-discipline" onclick="filtrerDiscipline('Sciences et Techniques des Activités Physiques, Sportives et Loisirs')"><span class="icone">🏃</span><span class="nom">Sciences et Techniques des Activités Physiques, Sportives et Loisirs (STAPS-JL)</span><span class="nb">105 publications</span></div>
+    </div>
+  </div>
+
+  <div class="publications-section">
+    <div class="pubs-header">
+      <div><h2 class="section-titre">Publications récentes</h2><p class="section-sous-titre">Derniers travaux déposés sur la plateforme</p></div>
+      <button class="btn btn-secondaire" onclick="afficherPage('recherche')">Voir toutes →</button>
+    </div>
+    <div class="grille-pubs" id="pubsAccueil"></div>
+  </div>
+
+</div>
+
+<!-- ===== PAGE RECHERCHE ===== -->
+<div id="page-recherche" class="page">
+  <div class="page-header-bar">
+    <h1>Explorer les publications</h1>
+    <p>Moteur de recherche multicritère de la production scientifique béninoise</p>
+  </div>
+  <div class="recherche-page">
+    <aside class="filtres-sidebar">
+      <h3>🔍 Filtres avancés</h3>
+      <button class="filtres-toggle" id="filtresToggleBtn" onclick="toggleFiltres()">▼ Afficher / Masquer les filtres</button>
+      <div class="filtres-sidebar-contenu" id="filtresSidebarContenu">
+        <div class="filtre-groupe"><label>Mot-clé</label><input type="text" id="filtreMotCle" placeholder="Ex: paludisme, maïs..." onkeyup="appliquerFiltres()"></div>
+        <div class="filtre-groupe"><label>Type de document</label>
+          <div class="checkbox-groupe">
+            <label><input type="checkbox" value="Article" onchange="appliquerFiltres()"> Article scientifique</label>
+            <label><input type="checkbox" value="Thèse" onchange="appliquerFiltres()"> Thèse de doctorat</label>
+            <label><input type="checkbox" value="Mémoire" onchange="appliquerFiltres()"> Mémoire de Master</label>
+            <label><input type="checkbox" value="Rapport" onchange="appliquerFiltres()"> Rapport de recherche</label>
+          </div>
+        </div>
+        <div class="filtre-groupe"><label>Discipline</label>
+          <select id="filtreDiscipline" onchange="appliquerFiltres()">
+            <option value="">Toutes les disciplines</option>
+            <option>Lettres et Sciences Humaines</option><option>Sciences Économiques et de Gestion</option><option>Sciences Juridiques et Politiques</option><option>Mathématiques, Physique, Chimie</option><option>Sciences Naturelles et Agronomie</option><option>Sciences et Techniques de l’Ingénieur</option><option>Médecine, Pharmacie, Odontostomatologie, Médecine Vétérinaire</option><option>Sciences et Techniques des Activités Physiques, Sportives et Loisirs</option>
+          </select>
+        </div>
+        <div class="filtre-groupe"><label>Institution</label>
+          <select id="filtreInstitution" onchange="appliquerFiltres()">
+            <option value="">Toutes les institutions</option>
+            <option>Université d'Abomey-Calavi (UAC)</option><option>Université de Parakou (UP)</option><option>Université Nationale d'Agriculture (UNA)</option><option>EPAC</option><option>FAST</option><option>FSS</option><option>Institut de Mathématiques et de Sciences Physiques (IMSP)</option>
+          </select>
+        </div>
+        <div class="filtre-groupe"><label>Période</label>
+          <select id="filtreAnnee" onchange="appliquerFiltres()">
+            <option value="">Toutes les années</option>
+            <option>2024</option><option>2023</option><option>2022</option><option>2021</option><option>2020</option><option value="avant2020">Avant 2020</option>
+          </select>
+        </div>
+        <div class="filtre-groupe"><label>Auteur</label><input type="text" id="filtreAuteur" placeholder="Nom de l'auteur..." onkeyup="appliquerFiltres()"></div>
+        <button class="btn btn-secondaire" style="width:100%;margin-top:8px" onclick="resetFiltres()">Réinitialiser</button>
+      </div>
+    </aside>
+    <div>
+      <div class="resultats-header">
+        <span class="resultats-nb" id="nbResultats"><span>0</span> résultats</span>
+        <select class="tri-select" id="triSelect" onchange="appliquerFiltres()">
+          <option value="date">Plus récents d'abord</option>
+          <option value="populaire">Plus consultés</option>
+          <option value="titre">Titre (A→Z)</option>
+        </select>
+      </div>
+      <div class="liste-resultats" id="listeResultats"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PAGE PUBLICATION ===== -->
+<div id="page-publication" class="page">
+  <div class="breadcrumb">
+    <a onclick="afficherPage('accueil')">Accueil</a><span>›</span>
+    <a onclick="afficherPage('recherche')">Publications</a><span>›</span>
+    <span id="breadcrumbTitre">Titre</span>
+  </div>
+  <div class="pub-detail" id="pubDetailContenu"></div>
+</div>
+
+<!-- ===== PAGE DÉPÔT ===== -->
+<div id="page-depot" class="page">
+  <div class="page-header-bar">
+    <h1>📤 Déposer une publication</h1>
+    <p>Soumettez votre travail scientifique pour validation et publication</p>
+  </div>
+  <div class="depot-page">
+    <div class="etapes-depot">
+      <div class="etape active"><span class="etape-nb">1</span> Informations</div>
+      <div class="etape"><span class="etape-nb">2</span> Métadonnées</div>
+      <div class="etape"><span class="etape-nb">3</span> Fichier PDF</div>
+      <div class="etape"><span class="etape-nb">4</span> Soumission</div>
+    </div>
+    <form class="formulaire" onsubmit="soumettreDepot(event)">
+      <h3 style="font-family:var(--font-titre);color:var(--noir);font-size:1.1rem;padding-bottom:8px;border-bottom:2px solid var(--jaune)">📋 Informations générales</h3>
+      <div class="champ"><label>Titre complet <span>*</span></label><input type="text" id="depotTitre" placeholder="Titre de votre publication" required></div>
+      <div class="champ"><label>Résumé / Abstract <span>*</span></label><textarea id="depotResume" placeholder="Résumé de votre travail (minimum 150 mots)..." required></textarea></div>
+      <div class="champs-deux-cols">
+        <div class="champ"><label>Type de document <span>*</span></label>
+          <select id="depotType" required>
+            <option value="">Sélectionner...</option>
+            <option value="Article">Article scientifique</option><option value="Thèse">Thèse de doctorat</option><option value="Mémoire">Mémoire de Master</option><option value="Rapport">Rapport de recherche</option>
+          </select>
+        </div>
+        <div class="champ"><label>Discipline <span>*</span></label>
+          <select id="depotDiscipline" required>
+            <option value="">Sélectionner...</option>
+            <option>Lettres et Sciences Humaines</option><option>Sciences Économiques et de Gestion</option><option>Sciences Juridiques et Politiques</option><option>Mathématiques, Physique, Chimie</option><option>Sciences Naturelles et Agronomie</option><option>Sciences et Techniques de l’Ingénieur</option><option>Médecine, Pharmacie, Odontostomatologie, Médecine Vétérinaire</option><option>Sciences et Techniques des Activités Physiques, Sportives et Loisirs</option>
+          </select>
+        </div>
+      </div>
+      <div class="champs-deux-cols">
+        <div class="champ"><label>Auteur(s) <span>*</span></label><input type="text" id="depotAuteur" placeholder="Ex: Koffi A., Adjovi M." required></div>
+        <div class="champ"><label>Institution <span>*</span></label>
+          <select id="depotInstitution" required onchange="gererInstitutionAutre(this)">
+            <option value="">Sélectionner...</option>
+            <option>Université d'Abomey-Calavi (UAC)</option><option>Université de Parakou (UP)</option><option>Université Nationale d'Agriculture (UNA)</option><option>EPAC</option><option>FAST</option><option>FSS</option><option>IMSP</option><option value="Autre">Autre (préciser)</option>
+          </select>
+          <input type="text" id="institutionAutreChamp" placeholder="Précisez votre institution..." style="display:none;margin-top:8px;width:100%;padding:10px 14px;border:1.5px solid var(--gris-bord);border-radius:8px;font-family:var(--font-corps);font-size:0.9rem;outline:none">
+        </div>
+      </div>
+      <div class="champs-deux-cols">
+        <div class="champ"><label>Mots-clés <span>*</span></label><input type="text" id="depotMotsCles" placeholder="Ex: paludisme, traitement, Bénin" required></div>
+        <div class="champ"><label>Date de publication <span>*</span></label><input type="date" id="depotDate" required></div>
+      </div>
+      <div class="champ"><label>Spécialité / Domaine de recherche</label><input type="text" id="depotSpecialite" placeholder="Ex: Épidémiologie, Génie logiciel, Droit constitutionnel..."></div>
+      <h3 style="font-family:var(--font-titre);color:var(--noir);font-size:1.1rem;padding-bottom:8px;border-bottom:2px solid var(--jaune);margin-top:8px">📎 Fichier PDF</h3>
+      <div class="zone-upload" onclick="document.getElementById('fileInput').click()">
+        <input type="file" id="fileInput" accept=".pdf" style="display:none" onchange="fichierSelectionne(event)">
+        <span class="icone-upload">📄</span>
+        <p><strong>Cliquez pour sélectionner</strong> ou glissez votre fichier PDF ici</p>
+        <p style="font-size:0.78rem;margin-top:6px">Formats acceptés : PDF · Taille maximum : 50 Mo</p>
+        <div id="nomFichier" style="margin-top:12px;padding:8px 16px;background:var(--jaune-clair);border-radius:6px;color:var(--noir);font-weight:600;font-size:0.85rem;display:none"></div>
+      </div>
+      <div style="background:var(--jaune-clair);border:1px solid var(--jaune);border-radius:8px;padding:12px 16px;font-size:0.85rem;color:#7a6000;display:flex;gap:8px;align-items:flex-start">
+        <span>⚠️</span>
+        <span>Votre publication sera examinée par notre comité de reviewers avant publication. Ce processus peut prendre 5 à 10 jours ouvrables. Vous serez notifié par email.</span>
+      </div>
+      <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:8px;flex-wrap:wrap">
+        <button type="button" class="btn btn-secondaire" onclick="afficherPage('accueil')">Annuler</button>
+        <button type="submit" class="btn btn-primaire">📤 Soumettre pour validation</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ===== PAGE CLASSEMENT ===== -->
+<div id="page-classement" class="page">
+  <div class="page-header-bar"><h1>🏆 Classement des chercheurs</h1><p>Les auteurs les plus prolifiques de la plateforme nationale</p></div>
+  <div class="classement">
+    <div class="admin-tabs" style="margin-top:1.5rem">
+      <button class="admin-tab actif" onclick="afficherClassement('auteurs',this)">👤 Par auteur</button>
+      <button class="admin-tab" onclick="afficherClassement('institutions',this)">🏫 Par institution</button>
+      <button class="admin-tab" onclick="afficherClassement('lus',this)">👁️ Plus consultés</button>
+    </div>
+    <div id="classementContenu"></div>
+  </div>
+</div>
+
+<!-- ===== PAGE À PROPOS ===== -->
+<div id="page-apropos" class="page">
+  <div class="apropos">
+    <h1>À propos de Taaka</h1>
+    <p style="color:var(--texte-muted);font-size:1.05rem;margin-bottom:2rem;line-height:1.8">Taaka est la plateforme nationale de publication et de recherche scientifique du Bénin, créée pour centraliser, numériser et démocratiser l'accès à la production scientifique nationale.</p>
+    <div class="apropos-section"><h2>Notre mission</h2><p>Face à la fragmentation des supports de publication, au manque de visibilité internationale et à l'insuffisance des initiatives numériques centralisées, Taaka répond à un besoin crucial : rassembler en un seul lieu l'ensemble de la production scientifique béninoise dans toutes ses disciplines.</p><p>Nous croyons que la science doit circuler librement, que les chercheurs béninois méritent une reconnaissance nationale et internationale, et que les étudiants doivent avoir accès aux travaux qui les ont précédés.</p></div>
+    <div class="apropos-section"><h2>Objectifs</h2>
+      <p>• Développer une base de données numérique centralisée des travaux scientifiques béninois.</p>
+      <p>• Offrir un espace sécurisé pour la publication en ligne d'articles, mémoires, thèses et rapports.</p>
+      <p>• Mettre en place un moteur de recherche multicritère performant.</p>
+      <p>• Favoriser la visibilité des chercheurs béninois à l'échelle nationale, régionale et internationale.</p>
+    </div>
+    <div class="apropos-section"><h2>Public cible</h2><p>La plateforme s'adresse aux enseignants-chercheurs, doctorants, étudiants de Master, chercheurs indépendants, universités et instituts de recherche, ainsi qu'aux institutions publiques comme le Ministère de l'Enseignement Supérieur et de la Recherche Scientifique.</p></div>
+    <div class="apropos-section"><h2>Nos partenaires</h2>
+      <div class="partenaires-grille">
+        <div class="partenaire-card">🏛️ UAC — Université d'Abomey-Calavi</div>
+        <div class="partenaire-card">🏛️ Université de Parakou</div>
+        <div class="partenaire-card">🏛️ UNA — Agric. Nationale</div>
+        <div class="partenaire-card">🏛️ Ministère de l’Enseignement Supérieur et de la Recherche Scientifique</div>
+        <div class="partenaire-card">💻 Ministère de l’Économie Numérique et de la Digitalisation</div>
+        <div class="partenaire-card">📚 Bibliothèques universitaires</div>
+        <div class="partenaire-card">🌍 AUF — Francophonie</div>
+        <div class="partenaire-card">🌐 UNESCO</div>
+        <div class="partenaire-card">🤝 ONG partenaires</div>
+      </div>
+    </div>
+    <div class="apropos-section"><h2>Contact</h2>
+      <p>Pour toute question, partenariat ou signalement :</p>
+      <p>📧 contact@takaa.bj</p>
+      <p>📞 +229 01 91 12 99 00 &nbsp;|&nbsp; +229 01 67 68 90 28 &nbsp;|&nbsp; +33 7 80 86 74 23</p>
+      <p>📍 Cotonou, République du Bénin</p>
+    </div>
+  </div>
+</div>
+
+
+<!-- ===== PAGE MON PROFIL (espace personnel) ===== -->
+<div id="page-monprofil" class="page">
+  <div class="page-header-bar">
+    <h1>👤 Mon espace</h1>
+    <p>Consultez et gérez vos publications</p>
+  </div>
+  <div style="max-width:1000px;margin:0 auto;padding:2rem">
+    <div id="monProfilHeader" style="margin-bottom:2rem"></div>
+    <div class="admin-tabs" id="monProfilTabs">
+      <button class="admin-tab actif" onclick="afficherMesPublications('actives',this)">✅ Publiées</button>
+      <button class="admin-tab" onclick="afficherMesPublications('attente',this)">⏳ En attente</button>
+      <button class="admin-tab" onclick="afficherMesPublications('revision',this)">🔄 À réviser</button>
+      <button class="admin-tab" onclick="afficherMesPublications('rejete',this)">❌ Rejetées</button>
+    </div>
+    <div id="mesPublicationsContenu"></div>
+  </div>
+</div>
+
+<!-- ===== PAGE PROFIL ===== -->
+<div id="page-profil" class="page">
+  <div class="profil-page" id="profilContenu"></div>
+</div>
+
+<!-- ===== PAGE GUIDE DE DÉPÔT ===== -->
+<div id="page-guide" class="page">
+  <div class="page-header-bar"><h1>📖 Guide de dépôt</h1><p>Comment soumettre votre publication sur Taaka</p></div>
+  <div class="aide-page">
+    <h1>Guide de dépôt</h1>
+    <p style="color:var(--texte-muted);margin-bottom:2rem">Ce guide vous accompagne pas à pas dans le processus de soumission de votre travail scientifique sur la plateforme Taaka.</p>
+
+    <div class="aide-section">
+      <h2>1. Conditions préalables</h2>
+      <p>Avant de soumettre, assurez-vous que :</p>
+      <ul>
+        <li>Vous disposez d'un compte actif sur Taaka (inscription gratuite).</li>
+        <li>Votre document est finalisé et exporté au format <strong>PDF</strong>.</li>
+        <li>Le fichier ne dépasse pas <strong>50 Mo</strong>.</li>
+        <li>Votre travail est bien de votre auteur et constitue une contribution originale.</li>
+      </ul>
+    </div>
+
+    <div class="aide-section">
+      <h2>2. Étapes de soumission</h2>
+      <div class="aide-etape"><div class="aide-etape-nb">1</div><div class="aide-etape-texte"><strong>Créez votre compte</strong><span>Rendez-vous sur "Connexion" puis "Créer un compte". Renseignez vos informations et votre institution.</span></div></div>
+      <div class="aide-etape"><div class="aide-etape-nb">2</div><div class="aide-etape-texte"><strong>Accédez au formulaire de dépôt</strong><span>Cliquez sur "Déposer" dans le menu de navigation après connexion.</span></div></div>
+      <div class="aide-etape"><div class="aide-etape-nb">3</div><div class="aide-etape-texte"><strong>Renseignez les métadonnées</strong><span>Titre complet, résumé (minimum 150 mots), auteur(s), institution, discipline, mots-clés, date de publication.</span></div></div>
+      <div class="aide-etape"><div class="aide-etape-nb">4</div><div class="aide-etape-texte"><strong>Téléversez votre fichier PDF</strong><span>Glissez-déposez ou sélectionnez votre fichier. La taille maximale est de 50 Mo.</span></div></div>
+      <div class="aide-etape"><div class="aide-etape-nb">5</div><div class="aide-etape-texte"><strong>Soumettez pour validation</strong><span>Votre publication est transmise au comité de reviewers pour expertise avant publication.</span></div></div>
+      <div class="aide-etape"><div class="aide-etape-nb">6</div><div class="aide-etape-texte"><strong>Recevez la décision</strong><span>Sous 5 à 10 jours ouvrables, vous serez notifié par email : acceptation, demande de révision ou refus motivé.</span></div></div>
+    </div>
+
+    <div class="aide-section">
+      <h2>3. Types de documents acceptés</h2>
+      <ul>
+        <li><strong>Articles scientifiques</strong> — publiés ou inédits, soumis à revue par les pairs.</li>
+        <li><strong>Thèses de doctorat</strong> — soutenues dans une institution béninoise ou par un chercheur béninois.</li>
+        <li><strong>Mémoires de Master</strong> — Master 2 ou équivalent, avec mention minimale Bien.</li>
+        <li><strong>Rapports de recherche</strong> — rapports institutionnels, études de cas, résultats d'enquêtes.</li>
+      </ul>
+    </div>
+
+    <div class="aide-section">
+      <h2>4. Recommandations</h2>
+      <ul>
+        <li>Rédigez un résumé clair et structuré (contexte, méthode, résultats, conclusion).</li>
+        <li>Choisissez 4 à 8 mots-clés représentatifs pour optimiser la visibilité dans les recherches.</li>
+        <li>Vérifiez l'orthographe du titre et du résumé avant soumission.</li>
+        <li>En cas de co-auteurs, listez tous les noms séparés par des virgules.</li>
+      </ul>
+    </div>
+
+    <div style="margin-top:2rem">
+      <button class="btn btn-primaire" onclick="demanderDepot()">📤 Accéder au formulaire de dépôt</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PAGE POLITIQUE ÉDITORIALE ===== -->
+<div id="page-politique" class="page">
+  <div class="page-header-bar"><h1>📋 Politique éditoriale</h1><p>Principes et critères de publication sur Taaka</p></div>
+  <div class="aide-page">
+    <h1>Politique éditoriale</h1>
+
+    <div class="aide-section">
+      <h2>Principes généraux</h2>
+      <p>Taaka est une plateforme ouverte dédiée à la valorisation de la recherche scientifique béninoise. Toute publication soumise est évaluée selon des critères de qualité académique, d'originalité et de pertinence scientifique.</p>
+      <p>La plateforme accueille des travaux dans toutes les disciplines scientifiques, sans restriction thématique, à condition qu'ils respectent les normes éthiques de la recherche.</p>
+    </div>
+
+    <div class="aide-section">
+      <h2>Critères d'évaluation</h2>
+      <ul>
+        <li><strong>Originalité :</strong> Le travail doit apporter une contribution nouvelle à la connaissance scientifique.</li>
+        <li><strong>Rigueur méthodologique :</strong> La démarche scientifique doit être clairement décrite et appropriée.</li>
+        <li><strong>Pertinence :</strong> Le sujet doit présenter un intérêt pour la communauté scientifique béninoise ou africaine.</li>
+        <li><strong>Qualité rédactionnelle :</strong> Le document doit être rédigé en français ou en anglais, avec une expression claire et soignée.</li>
+        <li><strong>Éthique :</strong> Aucun plagiat, aucune fabrication de données, respect des droits des participants (études humaines).</li>
+      </ul>
+    </div>
+
+
+
+
+    <div class="aide-section">
+      <h2>Classification disciplinaire — Alignement sur les CTS du CAMES</h2>
+      <p>Taaka a fait le choix délibéré d'aligner sa classification disciplinaire sur les <strong>8 Comités Techniques Spécialisés (CTS) officiels du CAMES</strong> (Conseil Africain et Malgache pour l'Enseignement Supérieur), référentiel institutionnel de reconnaissance des carrières académiques dans les 19 pays membres, dont le Bénin.</p>
+      <p>Ces 8 champs disciplinaires sont :</p>
+      <ul>
+        <li><strong>Lettres et Sciences Humaines (LSH)</strong> — histoire, géographie, langues, sociologie, philosophie, sciences de l'éducation…</li>
+        <li><strong>Sciences Économiques et de Gestion (SEG)</strong> — économie, comptabilité, finance, management, marketing…</li>
+        <li><strong>Sciences Juridiques et Politiques (SJP)</strong> — droit privé, droit public, science politique…</li>
+        <li><strong>Mathématiques, Physique, Chimie (MPC)</strong> — mathématiques pures et appliquées, physique, chimie…</li>
+        <li><strong>Sciences Naturelles et Agronomie (SNA)</strong> — biologie, écologie, agronomie, foresterie, environnement…</li>
+        <li><strong>Sciences et Techniques de l’Ingénieur (STI)</strong> — informatique, génie électrique, civil, mécanique, numérique…</li>
+        <li><strong>Médecine, Pharmacie, Odontostomatologie, Médecine Vétérinaire (MHPOMVPA)</strong> — toutes spécialités médicales et vétérinaires…</li>
+        <li><strong>Sciences et Techniques des Activités Physiques, Sportives et Loisirs (STAPS-JL)</strong> — éducation physique, sport, jeunesse…</li>
+      </ul>
+      <p>Ce choix garantit une <strong>cohérence institutionnelle</strong> avec les instances académiques africaines, facilite la <strong>reconnaissance officielle</strong> des travaux lors des évaluations CAMES, et positionne Taaka comme un outil de référence aligné sur les standards régionaux de l'enseignement supérieur béninois et africain.</p>
+    </div>
+
+    
+    <div class="aide-section">
+      <h2>Processus de révision</h2>
+      <p>Chaque soumission est examinée par au moins un reviewer membre du comité scientifique. Le reviewer évalue le travail selon une grille standardisée et formule une recommandation parmi :</p>
+      <ul>
+        <li><strong>Acceptation</strong> — publication sans modification.</li>
+        <li><strong>Révision mineure</strong> — corrections légères demandées avant publication.</li>
+        <li><strong>Révision majeure</strong> — modifications substantielles requises, nouvelle évaluation.</li>
+        <li><strong>Rejet</strong> — travail non conforme aux critères, motivé par écrit.</li>
+      </ul>
+    </div>
+
+    <div class="aide-section">
+      <h2>Droits et licences</h2>
+      <p>Les auteurs conservent l'intégralité de leurs droits de propriété intellectuelle. En soumettant sur Taaka, ils accordent à la plateforme une licence non exclusive d'affichage, de diffusion et d'indexation à des fins non commerciales.</p>
+      <p>Les publications sont en accès libre (Open Access) sauf demande contraire explicite et justifiée de l'auteur.</p>
+    </div>
+    <div class="aide-section">
+      <h2>Conduite à tenir en cas de litige</h2>
+      <p>Tout différend relatif à une publication (plagiat allégué, conflit de droits, erreurs factuelles) doit être signalé à l'adresse contact@takaa.bj. Le comité éditorial traitera chaque cas dans un délai de 15 jours ouvrables.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PAGE MENTIONS LÉGALES ===== -->
+<div id="page-mentions" class="page">
+  <div class="page-header-bar"><h1>⚖️ Mentions légales</h1><p>Informations légales relatives à la plateforme Taaka</p></div>
+  <div class="aide-page">
+    <h1>Mentions légales</h1>
+
+    <div class="aide-section">
+      <h2>Éditeur de la plateforme</h2>
+      <p><strong>Nom de la plateforme :</strong> Taaka — Plateforme Nationale de Recherche Scientifique du Bénin</p>
+      <p><strong>Statut :</strong> Initiative nationale à vocation académique et scientifique</p>
+      <p><strong>Siège :</strong> Cotonou, République du Bénin</p>
+      <p><strong>Email :</strong> contact@takaa.bj</p>
+      <p><strong>Téléphone :</strong> +229 01 91 12 99 00 · +229 01 67 68 90 28 · +33 7 80 86 74 23</p>
+    </div>
+    <div class="aide-section">
+      <h2>Propriété intellectuelle</h2>
+      <p>L'ensemble des éléments constituant la plateforme Taaka (logo, interface, charte graphique, code source) sont la propriété exclusive de leurs auteurs et sont protégés par les lois applicables en matière de propriété intellectuelle.</p>
+      <p>Les contenus publiés par les utilisateurs (articles, thèses, mémoires, rapports) restent la propriété de leurs auteurs respectifs, conformément à la politique éditoriale de la plateforme.</p>
+    </div>
+
+    <div class="aide-section">
+      <h2>Données personnelles</h2>
+      <p>Les données personnelles collectées (nom, prénom, email, institution) sont utilisées exclusivement dans le cadre du fonctionnement de la plateforme. Elles ne sont jamais vendues ni transmises à des tiers à des fins commerciales.</p>
+      <p>Conformément aux lois en vigueur, tout utilisateur dispose d'un droit d'accès, de rectification et de suppression de ses données en contactant contact@takaa.bj.</p>
+    </div>
+
+    <div class="aide-section">
+      <h2>Responsabilité</h2>
+      <p>Taaka met tout en œuvre pour assurer l'exactitude et la mise à jour des informations diffusées. Toutefois, la plateforme ne saurait être tenue responsable des inexactitudes ou omissions dans les contenus soumis par les utilisateurs.</p>
+      <p>Les auteurs sont seuls responsables de l'exactitude, de l'originalité et du respect des droits attachés à leurs publications.</p>
+    </div>
+
+    <div class="aide-section">
+      <h2>Droit applicable</h2>
+      <p>Les présentes mentions légales sont régies par le droit béninois. En cas de litige, les tribunaux compétents de Cotonou seront seuls compétents.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PAGE DASHBOARD ADMIN ===== -->
+<div id="page-dashboard" class="page">
+  <div class="page-header-bar">
+    <h1>⚙️ Tableau de bord administrateur</h1>
+    <p>Gestion des publications, comptes, modérateurs et statistiques</p>
+  </div>
+  <div class="dashboard">
+    <div class="stats-grille" id="dashboardStats">
+      <div class="stat-card"><span class="etiquette">Publications totales</span><span class="valeur" id="statTotal">…</span><span class="tendance" id="statTotalTendance"></span></div>
+      <div class="stat-card"><span class="etiquette">En attente</span><span class="valeur" id="statAttente" style="color:#c45e00">…</span><span class="tendance" style="color:var(--texte-muted)">Nécessite validation</span></div>
+      <div class="stat-card"><span class="etiquette">Chercheurs inscrits</span><span class="valeur" id="statChercheurs">…</span><span class="tendance" id="statChercheursT"></span></div>
+      <div class="stat-card"><span class="etiquette">Consultations totales</span><span class="valeur" id="statConsultations">…</span></div>
+      <div class="stat-card"><span class="etiquette">Téléchargements</span><span class="valeur" id="statTelechargements">…</span></div>
+    </div>
+
+    <div class="admin-tabs">
+      <button class="admin-tab actif" onclick="afficherAdminTab('depots',this)">📥 Dépôts en attente</button>
+      <button class="admin-tab" onclick="afficherAdminTab('comptes',this)">👤 Utilisateurs</button>
+      <button class="admin-tab" onclick="afficherAdminTab('moderateurs',this)">🛡️ Modérateurs</button>
+      <button class="admin-tab" onclick="afficherAdminTab('publiees',this)">📚 Publications actives</button>
+    </div>
+
+    <div id="adminContenu"></div>
+  </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="footer-grille">
+    <div>
+      <div class="footer-logo">Taak<span>a</span></div>
+      <p class="footer-desc">Plateforme nationale de publication et de recherche scientifique du Bénin. Centralisez, partagez et valorisez la science béninoise.</p>
+      <div style="margin-top:1rem;font-size:0.82rem;opacity:0.6;line-height:1.8">
+        📞 +229 01 91 12 99 00<br>
+        📞 +229 01 67 68 90 28<br>
+        📞 +33 7 80 86 74 23<br>
+        📧 contact@takaa.bj
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>La plateforme</h4>
+      <ul>
+        <li><a onclick="afficherPage('recherche')">Explorer</a></li>
+        <li><a onclick="demanderDepot()">Déposer</a></li>
+        <li><a onclick="afficherPage('classement')">Classement</a></li>
+        <li><a onclick="afficherPage('apropos')">À propos</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Disciplines</h4>
+      <ul>
+        <li><a onclick="filtrerDiscipline('Lettres et Sciences Humaines')">LSH</a></li>
+        <li><a onclick="filtrerDiscipline('Sciences Économiques et de Gestion')">SEG</a></li>
+        <li><a onclick="filtrerDiscipline('Sciences Juridiques et Politiques')">SJP</a></li>
+        <li><a onclick="filtrerDiscipline('Mathématiques, Physique, Chimie')">MPC</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Aide</h4>
+      <ul>
+        <li><a onclick="afficherPage('guide')">Guide de dépôt</a></li>
+        <li><a onclick="afficherPage('politique')">Politique éditoriale</a></li>
+        <li><a onclick="afficherPage('mentions')">Mentions légales</a></li>
+        <li><a onclick="afficherPage('apropos')">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bas">
+    <span>© 2025 Taaka — Plateforme Nationale de Recherche Scientifique du Bénin</span>
+    
+  </div>
+</footer>
+
+<!-- ===== MODAL ÉVALUATION ===== -->
+<div class="modal-overlay" id="modalEvaluation">
+  <div class="modal" style="max-width:780px;width:95%">
+    <div class="modal-header">
+      <h3>🔍 Évaluation de la soumission</h3>
+      <button class="btn-fermer" onclick="fermerModal('modalEvaluation')">✕</button>
+    </div>
+    <input type="hidden" id="evalPubId">
+
+    <div style="background:var(--gris);border-radius:var(--radius);padding:1.25rem;margin-bottom:1.25rem">
+      <h4 id="evalTitre" style="font-family:var(--font-titre);font-size:1.1rem;color:var(--noir);margin-bottom:8px"></h4>
+      <div style="font-size:0.85rem;color:var(--texte-muted);margin-bottom:10px">👤 <strong id="evalAuteur"></strong></div>
+      <div id="evalInfos" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px"></div>
+      <div style="margin-bottom:6px">
+        <span style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--texte-muted);font-weight:700">Résumé</span>
+        <p id="evalResume" style="font-size:0.88rem;color:var(--texte);line-height:1.7;margin-top:4px"></p>
+      </div>
+      <div>
+        <span style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--texte-muted);font-weight:700">Mots-clés</span>
+        <p id="evalMotsCles" style="font-size:0.85rem;color:var(--texte-muted);margin-top:4px"></p>
+      </div>
+    </div>
+
+    <div id="evalPdfZone" style="margin-bottom:1.25rem;border:1px solid var(--gris-bord);border-radius:var(--radius);overflow:hidden;min-height:80px"></div>
+
+    <div class="formulaire" style="border:none;padding:0;gap:1rem">
+      <div class="champ">
+        <label style="font-weight:700">Décision <span style="color:var(--rouge)">*</span></label>
+        <select id="evalDecision" onchange="afficherChampCommentaire(this.value)" style="border:1.5px solid var(--gris-bord);border-radius:8px;padding:10px 14px;font-family:var(--font-corps);font-size:0.9rem;outline:none">
+          <option value="">— Choisir une décision —</option>
+          <option value="accepte">✅ Acceptation — publication sans modification</option>
+          <option value="revision_mineure">🔄 Révision mineure — corrections légères avant publication</option>
+          <option value="revision_majeure">⚠️ Révision majeure — modifications substantielles requises</option>
+          <option value="rejete">❌ Rejet — travail non conforme aux critères</option>
+        </select>
+      </div>
+      <div class="champ" id="champCommentaire">
+        <label style="font-weight:700">Commentaire / Motivation <span id="commentaireOblig" style="color:var(--rouge);display:none">*</span></label>
+        <textarea id="evalCommentaire" placeholder="Rédigez votre appréciation, les points forts, les corrections demandées ou la motivation du rejet..." style="border:1.5px solid var(--gris-bord);border-radius:8px;padding:10px 14px;font-family:var(--font-corps);font-size:0.9rem;outline:none;resize:vertical;min-height:130px;width:100%"></textarea>
+      </div>
+      <div style="display:flex;gap:12px;justify-content:flex-end;flex-wrap:wrap">
+        <button class="btn btn-secondaire" onclick="fermerModal('modalEvaluation')">Annuler</button>
+        <button class="btn btn-primaire" onclick="soumettreEvaluation()">Soumettre l'évaluation</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL CONNEXION ===== -->
+<div class="modal-overlay" id="modalConnexion">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Accéder à la plateforme</h3>
+      <button class="btn-fermer" onclick="fermerModal('modalConnexion')">✕</button>
+    </div>
+    <div id="depotHint" style="display:none;background:#fff8e1;border:1px solid #f5c800;border-left:4px solid #f5c800;border-radius:8px;padding:10px 14px;margin-bottom:1rem;font-size:0.85rem;color:#7a6000">
+      📤 <strong>Connexion requise</strong> — Connectez-vous ou créez un compte pour déposer votre publication.
+    </div>
+    <div class="auth-tabs">
+      <button class="auth-tab actif" onclick="toggleAuthTab('connexion',this)">Se connecter</button>
+      <button class="auth-tab" onclick="toggleAuthTab('inscription',this)">Créer un compte</button>
+    </div>
+    <div id="formConnexion">
+      <div class="formulaire" style="border:none;padding:0;gap:1rem">
+        <div class="champ"><label>Adresse email</label><input type="email" id="loginEmail" placeholder="votre@email.com"></div>
+        <div class="champ"><label>Mot de passe</label><input type="password" id="loginMdp" placeholder="••••••••"></div>
+        <div style="display:flex;gap:8px;margin-top:4px">
+          <button class="btn btn-primaire" style="flex:1" onclick="seConnecter()">Se connecter</button>
+        </div>
+        <p style="text-align:center;font-size:0.8rem;color:var(--texte-muted);margin-top:4px"><a style="color:var(--noir);cursor:pointer;font-weight:600">Mot de passe oublié ?</a></p>
+
+      </div>
+    </div>
+    <div id="formInscription" style="display:none">
+      <div class="formulaire" style="border:none;padding:0;gap:1rem">
+        <div class="champs-deux-cols">
+          <div class="champ"><label>Prénom <span style="color:var(--rouge)">*</span></label><input type="text" id="regPrenom" placeholder="Votre prénom"></div>
+          <div class="champ"><label>Nom <span style="color:var(--rouge)">*</span></label><input type="text" id="regNom" placeholder="Votre nom"></div>
+        </div>
+        <div class="champ"><label>Email <span style="color:var(--rouge)">*</span></label><input type="email" id="regEmail" placeholder="votre@email.com"></div>
+        <div class="champ"><label>Type de compte <span style="color:var(--rouge)">*</span></label>
+          <select id="regType">
+            <option>Chercheur</option><option>Enseignant-chercheur</option><option>Doctorant</option><option>Étudiant Master</option><option>Institution</option>
+          </select>
+        </div>
+        <div class="champ"><label>Institution</label><input type="text" id="regInstitution" placeholder="Votre université ou laboratoire"></div>
+        <div class="champ"><label>Biographie</label><textarea id="regBio" placeholder="Présentez-vous en quelques lignes : vos domaines de recherche, vos travaux, vos centres d'intérêt scientifiques..." style="border:1.5px solid var(--gris-bord);border-radius:8px;padding:10px 14px;font-family:var(--font-corps);font-size:0.9rem;outline:none;resize:vertical;min-height:90px;width:100%"></textarea></div>
+        <div class="champ"><label>Mot de passe <span style="color:var(--rouge)">*</span></label><input type="password" id="regMdp" placeholder="Minimum 8 caractères"></div>
+        <button class="btn btn-primaire" onclick="sInscrire()" style="width:100%;margin-top:4px;justify-content:center">Créer mon compte</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL CRÉER MODÉRATEUR ===== -->
+<div class="modal-overlay" id="modalCreerModo">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>🛡️ Créer un compte modérateur</h3>
+      <button class="btn-fermer" onclick="fermerModal('modalCreerModo')">✕</button>
+    </div>
+    <div class="formulaire" style="border:none;padding:0;gap:1rem">
+      <div class="champs-deux-cols">
+        <div class="champ"><label>Prénom <span style="color:var(--rouge)">*</span></label><input type="text" id="modoPrenom" placeholder="Prénom"></div>
+        <div class="champ"><label>Nom <span style="color:var(--rouge)">*</span></label><input type="text" id="modoNom" placeholder="Nom"></div>
+      </div>
+      <div class="champ"><label>Email <span style="color:var(--rouge)">*</span></label><input type="email" id="modoEmail" placeholder="prenom.nom@uac.bj"></div>
+      <div class="champ"><label>Rôle <span style="color:var(--rouge)">*</span></label>
+        <select id="modoRole">
+          <option value="moderateur">Modérateur — validation des dépôts</option>
+          <option value="reviewer">Reviewer — expertise scientifique</option>
+        </select>
+      </div>
+      <div class="champ"><label>Institution / Spécialité</label><input type="text" id="modoInstitution" placeholder="Ex: FAST · UAC · Biologie végétale"></div>
+      <div class="champ"><label>Biographie</label><textarea id="modoBio" placeholder="Parcours académique, domaines d'expertise, publications notables..." style="border:1.5px solid var(--gris-bord);border-radius:8px;padding:10px 14px;font-family:var(--font-corps);font-size:0.9rem;outline:none;resize:vertical;min-height:90px;width:100%"></textarea></div>
+      <div class="champ"><label>Disciplines assignées</label>
+        <select id="modoDisciplines" multiple style="height:110px">
+            <option>Lettres et Sciences Humaines</option><option>Sciences Économiques et de Gestion</option><option>Sciences Juridiques et Politiques</option><option>Mathématiques, Physique, Chimie</option><option>Sciences Naturelles et Agronomie</option><option>Sciences et Techniques de l’Ingénieur</option><option>Médecine, Pharmacie, Odontostomatologie, Médecine Vétérinaire</option><option>Sciences et Techniques des Activités Physiques, Sportives et Loisirs</option>
+          </select>
+        <span style="font-size:0.75rem;color:var(--texte-muted)">Ctrl+clic pour sélectionner plusieurs</span>
+      </div>
+      <div style="background:var(--jaune-clair);border:1px solid var(--jaune);border-radius:8px;padding:10px 14px;font-size:0.82rem;color:#7a6000">
+        🔑 Un email d'invitation avec les identifiants de connexion sera envoyé automatiquement.
+      </div>
+      <div style="display:flex;gap:10px;justify-content:flex-end">
+        <button class="btn btn-secondaire" onclick="fermerModal('modalCreerModo')">Annuler</button>
+        <button class="btn btn-primaire" onclick="creerModerateur()">Créer le compte</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+// ===== DONNÉES =====
+const PUBLICATIONS = [
+  { id:1, type:'Article', titre:'Efficacité du neem (Azadirachta indica) contre le paludisme : étude clinique au Bénin', auteur:'Dr. Koffi Adébayo', institution:'FSS · UAC', discipline:'Médecine, Pharmacie, Odontostomatologie, Médecine Vétérinaire', annee:2024, motsCles:['paludisme','neem','phytothérapie','Bénin'], resume:"Cette étude évalue l'efficacité antipaludéenne de l'extrait de feuilles de neem dans trois centres de santé de Cotonou. Les résultats montrent une réduction significative de la parasitémie chez 78% des patients traités sur une période de 14 jours.", consultations:1240, telechargements:342, statut:'valide', pages:18 },
+  { id:2, type:'Thèse', titre:"Optimisation des systèmes d'irrigation goutte-à-goutte pour la culture maraîchère dans le département du Mono", auteur:'Adjovi Mensah', institution:'UNA', discipline:'Sciences Naturelles et Agronomie', annee:2024, motsCles:['irrigation','maraîchage','Mono','eau'], resume:"Face aux enjeux climatiques et à la raréfaction de l'eau, cette thèse propose un modèle d'optimisation de l'irrigation goutte-à-goutte adapté aux conditions pédologiques du département du Mono. Le modèle développé réduit la consommation d'eau de 40% tout en maintenant les rendements.", consultations:987, telechargements:215, statut:'valide', pages:142 },
+  { id:3, type:'Mémoire', titre:'Intelligence artificielle et diagnostic médical dans les hôpitaux béninois : état des lieux et perspectives', auteur:'Innocent Tchéou', institution:'EPAC · UAC', discipline:"Sciences et Techniques de l’Ingénieur", annee:2023, motsCles:['IA','santé numérique','diagnostic','Bénin'], resume:"Ce mémoire dresse un état des lieux de l'adoption de l'intelligence artificielle dans les établissements de santé béninois et propose une feuille de route pour une intégration progressive, en tenant compte des contraintes infrastructurelles et humaines.", consultations:876, telechargements:198, statut:'valide', pages:87 },
+  { id:4, type:'Article', titre:'Impact des changements climatiques sur la biodiversité des forêts classées du sud-Bénin', auteur:'Prof. Glèlè Kakaï', institution:'FAST · UAC', discipline:'Sciences Naturelles et Agronomie', annee:2023, motsCles:['forêts','biodiversité','changement climatique','conservation'], resume:"Une analyse diachronique par télédétection sur 30 ans révèle une réduction de 23% du couvert forestier dans les forêts classées du sud-Bénin. L'étude identifie les facteurs anthropiques et climatiques déterminants et propose des mesures de conservation adaptées.", consultations:754, telechargements:167, statut:'valide', pages:22 },
+  { id:5, type:'Rapport', titre:'Analyse des déterminants de la performance scolaire dans les lycées publics du Bénin : une étude de panel 2018-2023', auteur:'Dossou Agbossou', institution:'Université de Parakou (UP)', discipline:'Lettres et Sciences Humaines', annee:2023, motsCles:['éducation','performance scolaire','Bénin','enseignement secondaire'], resume:"Cette étude longitudinale analyse les facteurs explicatifs des disparités de performance scolaire dans 120 lycées publics béninois. Elle met en évidence le rôle prépondérant de la formation continue des enseignants, de l'équipement pédagogique et de l'implication parentale.", consultations:643, telechargements:145, statut:'valide', pages:58 },
+  { id:6, type:'Article', titre:'Caractérisation des souches de Staphylococcus aureus résistantes aux antibiotiques dans les eaux souterraines de Cotonou', auteur:'Dr. Boko Hounsou', institution:'FSS · UAC', discipline:'Mathématiques, Physique, Chimie', annee:2024, motsCles:['résistance antibiotiques','eau souterraine','Cotonou','santé publique'], resume:"L'analyse microbiologique de 240 prélèvements d'eaux souterraines dans cinq arrondissements de Cotonou révèle une prévalence alarmante de souches de Staphylococcus aureus résistantes à la méticilline (SARM).", consultations:589, telechargements:132, statut:'valide', pages:15 }
+];
+
+const AUTEURS = [
+  { nom:'Prof. Glèlè Kakaï', institution:'FAST · UAC', discipline:'Sciences Naturelles et Agronomie', pubs:28, consultations:12400, initiales:'GK' },
+  { nom:'Dr. Koffi Adébayo', institution:'FSS · UAC', discipline:'Médecine, Pharmacie, Odontostomatologie, Médecine Vétérinaire', pubs:21, consultations:9870, initiales:'KA' },
+  { nom:'Prof. Mama Sambo', institution:'IMSP · UAC', discipline:'Mathématiques, Physique, Chimie', pubs:19, consultations:7230, initiales:'MS' },
+  { nom:'Dr. Boko Hounsou', institution:'FSS · UAC', discipline:'Mathématiques, Physique, Chimie', pubs:17, consultations:6540, initiales:'BH' },
+  { nom:'Adjovi Mensah', institution:'UNA', discipline:'Sciences Naturelles et Agronomie', pubs:14, consultations:5980, initiales:'AM' },
+  { nom:'Innocent Tchéou', institution:'EPAC · UAC', discipline:"Sciences et Techniques de l’Ingénieur", pubs:12, consultations:4320, initiales:'IT' },
+];
+
+const DEPOTS_ADMIN = [
+  { titre:'Analyse des coûts de production du coton au nord-Bénin', auteur:'Dr. Soglo A.', type:'Article', date:'12/06/2025', statut:'attente' },
+  { titre:'Étude sociolinguistique des langues fon et yoruba dans le Zou', auteur:'Gbèdokou M.', type:'Thèse', date:'10/06/2025', statut:'attente' },
+  { titre:"Modélisation hydrologique du bassin versant de l'Ouémé", auteur:'Prof. Doukpolo B.', type:'Article', date:'08/06/2025', statut:'attente' },
+];
+
+let MODERATEURS = [
+  { prenom:'Aline', nom:'Zinsou', email:'a.zinsou@fast.uac.bj', role:'moderateur', institution:'FAST · UAC', disciplines:['Environnement','Chimie'], nbValidations:47, dateCreation:'15/01/2025' },
+  { prenom:'Raoul', nom:'Gbèkè', email:'r.gbeke@fss.uac.bj', role:'reviewer', institution:'FSS · UAC', disciplines:['Sciences de la santé'], nbValidations:32, dateCreation:'03/03/2025' },
+  { prenom:'Mariama', nom:'Traoré', email:'m.traore@up.bj', role:'reviewer', institution:'Université de Parakou', disciplines:['Agriculture','Environnement'], nbValidations:18, dateCreation:'20/04/2025' },
+];
+
+// ===== ÉTAT =====
+let utilisateurConnecte = null;
+
+// afficherPage est définie plus bas avec le système historique
+
+// ===== HAMBURGER MOBILE =====
+function toggleDrawer() {
+  const drawer = document.getElementById('navDrawer');
+  drawer.classList.toggle('ouvert');
+}
+
+// ===== FILTRES MOBILE =====
+function toggleFiltres() {
+  const c = document.getElementById('filtresSidebarContenu');
+  const btn = document.getElementById('filtresToggleBtn');
+  c.classList.toggle('ouvert');
+  btn.textContent = c.classList.contains('ouvert') ? '▲ Masquer les filtres' : '▼ Afficher les filtres';
+}
+
+// ===== ACCUEIL =====
+/* remplacé par Supabase */
+
+function cartePublicationHTML(p) {
+  const tc = { Article:'type-article', 'Thèse':'type-these', 'Mémoire':'type-memoire', Rapport:'type-rapport' };
+  return `<div class="carte-pub" onclick="afficherPublication(${p.id})">
+    <span class="pub-type ${tc[p.type]||'type-article'}">${p.type}</span>
+    <div class="pub-titre">${p.titre}</div>
+    <div class="pub-auteur">👤 <span class="lien-auteur" onclick="event.stopPropagation();afficherProfil('${p.auteur}')">${p.auteur}</span></div>
+    <div class="pub-meta"><span>🏛 ${p.institution}</span><span>📅 ${p.annee}</span><span>📄 ${p.pages} p.</span></div>
+    <div class="pub-resume">${p.resume}</div>
+    <div class="pub-mots-cles">${p.motsCles.map(m=>`<span class="mot-cle">${m}</span>`).join('')}</div>
+    <div class="pub-stats"><span>👁 ${p.consultations.toLocaleString('fr')}</span><span>⬇ ${p.telechargements.toLocaleString('fr')}</span></div>
+  </div>`;
+}
+
+// ===== RECHERCHE =====
+function lancerRecherche() {
+  const q = (document.getElementById('heroSearch')?.value || document.getElementById('navSearchInput')?.value || '').toLowerCase();
+  afficherPage('recherche');
+  if (q) { setTimeout(() => { document.getElementById('filtreMotCle').value = q; appliquerFiltres(); }, 50); }
+}
+
+function lancerRechercheMobile() {
+  const q = (document.getElementById('mobileSearchInput')?.value || '').toLowerCase();
+  afficherPage('recherche');
+  if (q) { setTimeout(() => { document.getElementById('filtreMotCle').value = q; appliquerFiltres(); }, 50); }
+}
+
+function filtrerDisciplineSTI() { filtrerDiscipline('Sciences et Techniques de l’Ingénieur'); }
+function filtrerDiscipline(disc) {
+  afficherPage('recherche');
+  setTimeout(() => { document.getElementById('filtreDiscipline').value = disc; appliquerFiltres(); }, 50);
+}
+
+function appliquerFiltres() {
+  const motCle = document.getElementById('filtreMotCle').value.toLowerCase();
+  const discipline = document.getElementById('filtreDiscipline').value;
+  const institution = document.getElementById('filtreInstitution').value;
+  const annee = document.getElementById('filtreAnnee').value;
+  const auteur = document.getElementById('filtreAuteur').value.toLowerCase();
+  const tri = document.getElementById('triSelect').value;
+  const typesCoches = Array.from(document.querySelectorAll('.checkbox-groupe input:checked')).map(c => c.value);
+
+  let resultats = PUBLICATIONS.filter(p => {
+    if (motCle && !p.titre.toLowerCase().includes(motCle) && !p.resume.toLowerCase().includes(motCle) && !p.motsCles.join(' ').toLowerCase().includes(motCle)) return false;
+    if (discipline && p.discipline !== discipline) return false;
+    if (institution && !p.institution.includes(institution.split(' ')[0])) return false;
+    if (annee === 'avant2020' && p.annee >= 2020) return false;
+    if (annee && annee !== 'avant2020' && p.annee !== parseInt(annee)) return false;
+    if (auteur && !p.auteur.toLowerCase().includes(auteur)) return false;
+    if (typesCoches.length > 0 && !typesCoches.includes(p.type)) return false;
+    return true;
+  });
+
+  if (tri === 'date') resultats.sort((a,b) => b.annee - a.annee);
+  else if (tri === 'populaire') resultats.sort((a,b) => b.consultations - a.consultations);
+  else if (tri === 'titre') resultats.sort((a,b) => a.titre.localeCompare(b.titre));
+
+  chargerResultats(resultats);
+}
+
+/* remplacé par Supabase */
+
+function resetFiltres() {
+  document.getElementById('filtreMotCle').value = '';
+  document.getElementById('filtreDiscipline').value = '';
+  document.getElementById('filtreInstitution').value = '';
+  document.getElementById('filtreAnnee').value = '';
+  document.getElementById('filtreAuteur').value = '';
+  document.querySelectorAll('.checkbox-groupe input:checked').forEach(c => c.checked = false);
+  chargerResultats(PUBLICATIONS);
+  document.getElementById('nbResultats').innerHTML = '<span>' + PUBLICATIONS.length + '</span> résultats';
+}
+
+// ===== PUBLICATION INDIVIDUELLE =====
+/* remplacé par Supabase */
+
+/* remplacé par Supabase */
+
+/* remplacé par Supabase */
+
+/* remplacé par Supabase */
+
+// ===== AUTH =====
+function ouvrirModal(id) { document.getElementById(id).classList.add('ouvert'); }
+function fermerModal(id) { document.getElementById(id).classList.remove('ouvert'); }
+
+function toggleAuthTab(form, btn) {
+  document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('actif'));
+  btn.classList.add('actif');
+  document.getElementById('formConnexion').style.display = form === 'connexion' ? 'block' : 'none';
+  document.getElementById('formInscription').style.display = form === 'inscription' ? 'block' : 'none';
+}
+
+/* remplacé par Supabase */
+
+function finConnexion() {
+  fermerModal('modalConnexion');
+  // Desktop
+  document.getElementById('navAuth').style.display = 'none';
+  document.getElementById('navUser').style.display = 'block';
+  document.getElementById('navNomUser').textContent = utilisateurConnecte.nom;
+  document.getElementById('navDepotLien').style.display = 'inline-block';
+  if (utilisateurConnecte.role === 'admin') document.getElementById('navDashboard').style.display = 'inline-block';
+  if (utilisateurConnecte.role === 'moderateur') document.getElementById('navDashboard').style.display = 'inline-block';
+  // Mobile drawer
+  document.getElementById('drawerAuth').style.display = 'none';
+  document.getElementById('drawerUser').style.display = 'block';
+  document.getElementById('drawerDepot').style.display = 'block';
+  if (utilisateurConnecte.role === 'admin' || utilisateurConnecte.role === 'moderateur') document.getElementById('drawerDashboard').style.display = 'block';
+  toast('Bienvenue ' + utilisateurConnecte.nom + ' ! 👋','succes');
+  // Redirection post-connexion si l'utilisateur voulait déposer
+  if (window._apresConnexion === 'depot') {
+    window._apresConnexion = null;
+    setTimeout(() => afficherPage('depot'), 400);
+  }
+}
+
+/* remplacé par Supabase */
+
+/* remplacé par Supabase */
+
+// ===== DÉPÔT =====
+function fichierSelectionne(e) {
+  const f = e.target.files[0];
+  if (f) {
+    const el = document.getElementById('nomFichier');
+    el.textContent = '✓ ' + f.name + ' (' + (f.size/1024/1024).toFixed(2) + ' Mo)';
+    el.style.display = 'block';
+  }
+}
+
+/* remplacé par Supabase */
+
+// ===== TOASTS =====
+function toast(msg, type) {
+  const c = document.getElementById('toastContainer');
+  const t = document.createElement('div');
+  t.className = 'toast ' + (type || '');
+  t.textContent = msg;
+  c.appendChild(t);
+  setTimeout(() => t.remove(), 4500);
+}
+
+// Fermer modals au clic extérieur
+document.querySelectorAll('.modal-overlay').forEach(o => {
+  o.addEventListener('click', e => { if (e.target === o) fermerModal(o.id); });
+});
+
+
+// ===== PROTECTION DÉPÔT =====
+function demanderDepot() {
+  if (utilisateurConnecte) {
+    afficherPage('depot');
+  } else {
+    // Mémoriser l'intention puis ouvrir la modal de connexion
+    window._apresConnexion = 'depot';
+    ouvrirModal('modalConnexion');
+    // Afficher un message d'invitation dans la modal
+    const hint = document.getElementById('depotHint');
+    if (hint) hint.style.display = 'block';
+  }
+}
+
+
+// ===== HISTORIQUE DE NAVIGATION =====
+const _historique = [];
+
+function afficherPage(nom) {
+  // Empiler la page précédente (sauf si c'est la même)
+  if (_historique.length === 0 || _historique[_historique.length - 1] !== nom) {
+    _historique.push(nom);
+  }
+  _afficherPageInterne(nom);
+}
+
+function retourPage() {
+  if (_historique.length > 1) {
+    _historique.pop(); // retirer la page courante
+    const precedente = _historique[_historique.length - 1];
+    _afficherPageInterne(precedente);
+  } else {
+    _afficherPageInterne('accueil');
+  }
+}
+
+function _afficherPageInterne(nom) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const page = document.getElementById('page-' + nom);
+  if (page) page.classList.add('active');
+  window.scrollTo(0, 0);
+  // Bouton retour : masquer sur accueil
+  const btnRetour = document.getElementById('btnRetour');
+  if (btnRetour) btnRetour.style.display = (_historique.length > 1) ? 'flex' : 'none';
+  if (nom === 'accueil') chargerPubsAccueil();
+  if (nom === 'recherche') { chargerResultats(PUBLICATIONS); document.getElementById('nbResultats').innerHTML = '<span>' + PUBLICATIONS.length + '</span> résultats'; }
+  if (nom === 'classement') afficherClassement('auteurs', null);
+  if (nom === 'dashboard') { afficherAdminTab('depots', null); chargerStatsDashboard(); }
+  if (nom === 'monprofil') afficherMesPublications('actives', null);
+}
+
+/* remplacé par Supabase */
+
+// ===== FICHE RÉCAPITULATIVE PDF =====
+function telechargerFicheAuteur(nomAuteur) {
+  const auteur = AUTEURS.find(a => a.nom === nomAuteur);
+  const pubs = PUBLICATIONS.filter(p => p.auteur === nomAuteur);
+  const infos = auteur || { nom: nomAuteur, institution: pubs[0]?.institution || '—', discipline: pubs[0]?.discipline || '—' };
+  const totalC = pubs.reduce((s,p) => s + p.consultations, 0);
+  const totalDL = pubs.reduce((s,p) => s + p.telechargements, 0);
+
+  const html = `<!DOCTYPE html>
+<html lang="fr"><head><meta charset="UTF-8">
+<title>Fiche — ${infos.nom}</title>
+<style>
+  body { font-family: Georgia, serif; max-width: 800px; margin: 0 auto; padding: 2rem; color: #1a1a1a; }
+  .entete { border-bottom: 3px solid #f5c800; padding-bottom: 1.5rem; margin-bottom: 2rem; }
+  .entete h1 { font-size: 1.8rem; margin-bottom: 0.5rem; }
+  .entete p { color: #666; margin: 4px 0; font-size: 0.95rem; }
+  .stats { display: flex; gap: 2rem; margin: 1rem 0; }
+  .stat { text-align: center; }
+  .stat .val { font-size: 1.6rem; font-weight: bold; color: #1a1a1a; }
+  .stat .lab { font-size: 0.8rem; color: #888; }
+  .pub-item { border-left: 3px solid #f5c800; padding: 0.75rem 1rem; margin-bottom: 0.75rem; }
+  .pub-item h3 { font-size: 1rem; margin-bottom: 4px; }
+  .pub-meta { font-size: 0.82rem; color: #666; }
+  .badge { display: inline-block; background: #e8f0fe; color: #1a56db; padding: 2px 8px; border-radius: 12px; font-size: 0.72rem; font-weight: bold; text-transform: uppercase; margin-right: 6px; }
+  .footer { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid #ddd; font-size: 0.8rem; color: #999; text-align: center; }
+  @media print { body { padding: 1rem; } }
+</style>
+</head><body>
+<div class="entete">
+  <p style="color:#888;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.1em">Plateforme Taaka · Fiche récapitulative</p>
+  <h1>${infos.nom}</h1>
+  <p>🏛 ${infos.institution}</p>
+  <p>🔬 ${infos.discipline}</p>
+  <div class="stats">
+    <div class="stat"><div class="val">${pubs.length}</div><div class="lab">Publications</div></div>
+    <div class="stat"><div class="val">${totalC.toLocaleString('fr')}</div><div class="lab">Consultations</div></div>
+    <div class="stat"><div class="val">${totalDL.toLocaleString('fr')}</div><div class="lab">Téléchargements</div></div>
+  </div>
+</div>
+<h2 style="font-size:1.1rem;margin-bottom:1rem">Liste des publications</h2>
+${pubs.map((p,i) => `
+<div class="pub-item">
+  <p class="pub-meta"><span class="badge">${p.type}</span> ${p.annee} · ${p.discipline}</p>
+  <h3>${i+1}. ${p.titre}</h3>
+  <p class="pub-meta">👁 ${p.consultations.toLocaleString('fr')} consultations &nbsp;·&nbsp; ⬇ ${p.telechargements.toLocaleString('fr')} téléchargements</p>
+  <p style="font-size:0.82rem;color:#555;margin-top:4px">${p.resume.substring(0,180)}…</p>
+</div>`).join('')}
+<div class="footer">
+  Généré par Taaka · takaa.bj · ${new Date().toLocaleDateString('fr-FR', {day:'numeric',month:'long',year:'numeric'})}
+</div>
+</body></html>`;
+
+  const blob = new Blob([html], { type: 'text/html' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'fiche-' + infos.nom.toLowerCase().replace(/\s+/g,'-') + '.html';
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('Fiche téléchargée — ouvrez le fichier et utilisez Ctrl+P pour imprimer en PDF ✓', 'succes');
+}
+
+// ===== INSTITUTION AUTRE (dépôt) =====
+function gererInstitutionAutre(sel) {
+  const champ = document.getElementById('institutionAutreChamp');
+  if (!champ) return;
+  champ.style.display = sel.value === 'Autre' ? 'block' : 'none';
+  if (sel.value !== 'Autre') champ.value = '';
+}
+
+
+
+// ============================================================
+// SUPABASE — configuration
+// ============================================================
+const SUPA_URL = 'https://wmxpxbixhvjbgjykmfgg.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndteHB4Yml4aHZqYmdqeWttZmdnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY3Mzg0OTQsImV4cCI6MjA5MjMxNDQ5NH0.eTyilj0KQEremu9EiAqf1lybsS-gFM4QUQgjbrG1Z2k';
+// db sera initialisé après le chargement du SDK
+let db = null;
+function initSupabase() {
+  if (window.supabase && !db) {
+    db = window.supabase.createClient(SUPA_URL, SUPA_KEY);
+  }
+}
+
+// ── Utilitaire : afficher un spinner de chargement ────────────────────────
+function showLoader(conteneurId) {
+  const el = document.getElementById(conteneurId);
+  if (el) el.innerHTML = '<div style="text-align:center;padding:3rem;color:var(--texte-muted)"><div style="font-size:2rem;margin-bottom:1rem">⏳</div><p>Chargement en cours…</p></div>';
+}
+
+// ============================================================
+// AUTH — connexion Supabase réelle
+// ============================================================
+async function seConnecter() {
+  initSupabase(); if (!db) { toast('Service temporairement indisponible', 'erreur'); return; }
+  const email = document.getElementById('loginEmail').value.trim();
+  const mdp   = document.getElementById('loginMdp').value;
+  if (!email || !mdp) { toast('Veuillez remplir tous les champs', 'erreur'); return; }
+
+  const btn = document.querySelector('#formConnexion .btn-primaire');
+  if (btn) { btn.disabled = true; btn.textContent = 'Connexion…'; }
+
+  const { data, error } = await db.auth.signInWithPassword({ email, password: mdp });
+  if (btn) { btn.disabled = false; btn.textContent = 'Se connecter'; }
+
+  if (error) {
+    toast('Email ou mot de passe incorrect', 'erreur');
+    return;
+  }
+
+  // Récupérer le profil complet
+  const { data: profil } = await db
+    .from('profils')
+    .select('*')
+    .eq('id', data.user.id)
+    .single();
+
+  if (!profil) {
+    // Profil inexistant → créer un profil minimal
+    const meta = data.user.user_metadata || {};
+    await db.from('profils').insert({
+      id: data.user.id,
+      nom: meta.nom || 'Utilisateur',
+      prenom: meta.prenom || '',
+      email: data.user.email,
+      role: 'chercheur'
+    });
+    utilisateurConnecte = { id: data.user.id, nom: meta.nom || 'Utilisateur', prenom: meta.prenom || '', email: data.user.email, role: 'chercheur' };
+  } else {
+    utilisateurConnecte = { ...profil };
+    utilisateurConnecte.id = data.user.id; // forcer l'UUID Auth
+    utilisateurConnecte.nom = profil.nom + (profil.prenom ? ' ' + profil.prenom : '');
+  }
+
+  fermerModal('modalConnexion');
+  finConnexion();
+}
+
+// ── Inscription ────────────────────────────────────────────────────────────
+async function sInscrire() {
+  initSupabase(); if (!db) { toast('Service temporairement indisponible', 'erreur'); return; }
+  const prenom      = document.getElementById('regPrenom').value.trim();
+  const nom         = document.getElementById('regNom').value.trim();
+  const email       = document.getElementById('regEmail').value.trim();
+  const mdp         = document.getElementById('regMdp').value;
+  const type        = document.getElementById('regType').value;
+  const institution = document.getElementById('regInstitution').value.trim();
+  const bio         = document.getElementById('regBio')?.value.trim() || '';
+
+  if (!prenom || !nom || !email || !mdp) { toast('Veuillez remplir tous les champs obligatoires', 'erreur'); return; }
+  if (mdp.length < 8) { toast("Le mot de passe doit contenir au moins 8 caractères", "erreur"); return; }
+
+  const btn = document.querySelector('#formInscription .btn-primaire');
+  if (btn) { btn.disabled = true; btn.textContent = 'Création…'; }
+
+  const { data, error } = await db.auth.signUp({
+    email, password: mdp,
+    options: { data: { nom, prenom } }
+  });
+
+  if (btn) { btn.disabled = false; btn.textContent = 'Créer mon compte'; }
+
+  if (error) {
+    toast('Erreur : ' + error.message, 'erreur');
+    return;
+  }
+
+  // Cas 1 : confirmation email désactivée → data.user disponible immédiatement
+  if (data.user) {
+    await db.from('profils').insert({
+      id: data.user.id,
+      nom, prenom, email,
+      role: 'chercheur',
+      institution: institution || null,
+      bio: bio || null
+    }).then(() => {}).catch(() => {});
+
+    utilisateurConnecte = { id: data.user.id, nom: nom + ' ' + prenom, prenom, email, role: 'chercheur', institution };
+    fermerModal('modalConnexion');
+    finConnexion();
+    toast("Compte créé avec succès ! Bienvenue sur Taaka 🎉", "succes");
+  } else {
+    // Cas 2 : confirmation email activée → session non disponible immédiatement
+    fermerModal('modalConnexion');
+    toast("Compte créé ! Vérifiez votre boîte email et cliquez sur le lien de confirmation pour activer votre compte.", "succes");
+  }
+}
+
+// ── Déconnexion ────────────────────────────────────────────────────────────
+async function deconnexion() {
+  await db.auth.signOut();
+  utilisateurConnecte = null;
+  document.getElementById('navAuth').style.display = 'block';
+  document.getElementById('navUser').style.display = 'none';
+  document.getElementById('navDepotLien').style.display = 'none';
+  document.getElementById('navDashboard').style.display = 'none';
+  document.getElementById('drawerAuth').style.display = 'block';
+  document.getElementById('drawerUser').style.display = 'none';
+  document.getElementById('drawerDepot').style.display = 'none';
+  document.getElementById('drawerDashboard').style.display = 'none';
+  afficherPage('accueil');
+  toast('Vous êtes déconnecté(e)', '');
+}
+
+// ── Restaurer la session au chargement ────────────────────────────────────
+async function restaurerSession() {
+  initSupabase(); if (!db) return;
+  const { data } = await db.auth.getSession();
+  if (data?.session?.user) {
+    const { data: profil } = await db.from('profils').select('*').eq('id', data.session.user.id).single();
+    if (profil) {
+      utilisateurConnecte = { ...profil };
+      // S'assurer que l'id Auth (UUID) est bien celui de Supabase Auth
+      utilisateurConnecte.id = data.session.user.id;
+      utilisateurConnecte.nom = profil.nom + (profil.prenom ? ' ' + profil.prenom : '');
+      finConnexion();
+    } else {
+      // Profil manquant : le créer automatiquement depuis auth
+      const u = data.session.user;
+      const meta = u.user_metadata || {};
+      await db.from('profils').insert({
+        id: u.id,
+        nom: meta.nom || u.email.split('@')[0],
+        prenom: meta.prenom || '',
+        email: u.email,
+        role: 'chercheur'
+      }).then(() => {}).catch(() => {});
+      utilisateurConnecte = {
+        id: u.id,
+        nom: (meta.nom || u.email.split('@')[0]) + (meta.prenom ? ' ' + meta.prenom : ''),
+        prenom: meta.prenom || '',
+        email: u.email,
+        role: 'chercheur'
+      };
+      finConnexion();
+    }
+  }
+}
+
+// ============================================================
+// PUBLICATIONS — chargement depuis Supabase
+// ============================================================
+async function chargerPubsAccueil() {
+  const conteneur = document.getElementById('pubsAccueil');
+  if (!conteneur) return;
+  showLoader('pubsAccueil');
+
+  const { data, error } = await db
+    .from('publications')
+    .select('*')
+    .eq('statut', 'valide')
+    .order('date_depot', { ascending: false })
+    .limit(3);
+
+  if (error || !data || data.length === 0) {
+    // Fallback données démo si base vide
+    conteneur.innerHTML = PUBLICATIONS.slice(0,3).map(p => cartePublicationHTML(p)).join('');
+    return;
+  }
+  conteneur.innerHTML = data.map(p => cartePublicationHTML(normaliserPub(p))).join('');
+}
+
+async function chargerResultats(liste) {
+  const conteneur = document.getElementById('listeResultats');
+  const nbEl = document.getElementById('nbResultats');
+
+  // Si on passe des données locales (filtrage), on les utilise directement
+  if (liste && liste.length > 0 && liste[0].id && typeof liste[0].id === 'number' && liste[0].id <= 10) {
+    // Données de démo
+    _afficherResultats(liste);
+    return;
+  }
+
+  showLoader('listeResultats');
+
+  const { data, error } = await db
+    .from('publications')
+    .select('*')
+    .eq('statut', 'valide')
+    .order('date_depot', { ascending: false });
+
+  if (error) {
+    toast('Erreur de chargement des publications', 'erreur');
+    _afficherResultats(PUBLICATIONS);
+    return;
+  }
+
+  const pubs = (data && data.length > 0) ? data.map(normaliserPub) : PUBLICATIONS;
+  if (nbEl) nbEl.innerHTML = '<span>' + pubs.length + '</span> résultat' + (pubs.length !== 1 ? 's' : '');
+  _afficherResultats(pubs);
+}
+
+function _afficherResultats(liste) {
+  const conteneur = document.getElementById('listeResultats');
+  const nbEl = document.getElementById('nbResultats');
+  if (nbEl) nbEl.innerHTML = '<span>' + liste.length + '</span> résultat' + (liste.length !== 1 ? 's' : '');
+  if (!conteneur) return;
+  if (liste.length === 0) {
+    conteneur.innerHTML = '<div style="text-align:center;padding:3rem;color:var(--texte-muted)"><div style="font-size:2.5rem;margin-bottom:1rem">🔍</div><p>Aucune publication ne correspond à votre recherche.</p></div>';
+    return;
+  }
+  const tc = { Article:'type-article', 'Thèse':'type-these', 'Mémoire':'type-memoire', Rapport:'type-rapport' };
+  conteneur.innerHTML = liste.map(p => `
+    <div class="resultat-item" onclick="afficherPublication(${p.id})">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;flex-wrap:wrap;margin-bottom:8px">
+        <span class="pub-type ${tc[p.type]||'type-article'}">${p.type}</span>
+        <span style="font-size:0.8rem;color:var(--texte-muted)">${p.annee}</span>
+      </div>
+      <div class="pub-titre" style="margin-bottom:6px">${p.titre}</div>
+      <div class="pub-auteur" style="margin-bottom:8px">👤 <span class="lien-auteur" onclick="event.stopPropagation();afficherProfil('${p.auteur_nom||p.auteur}')">${p.auteur_nom||p.auteur}</span> · <span style="color:var(--texte-muted);font-weight:400">${p.institution}</span></div>
+      <div class="pub-resume">${p.resume}</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">${(p.mots_cles||p.motsCles||[]).map(m=>`<span class="mot-cle">${m}</span>`).join('')}</div>
+      <div class="pub-stats" style="margin-top:10px;padding-top:8px;border-top:1px solid var(--gris-bord)">
+        <span>👁 ${(p.consultations||0).toLocaleString('fr')}</span>
+        <span>⬇ ${(p.telechargements||0).toLocaleString('fr')}</span>
+        <span>📄 ${p.pages||0} p.</span>
+        <span style="margin-left:auto;color:var(--noir);font-weight:700;font-size:0.8rem">Lire →</span>
+      </div>
+    </div>`).join('');
+}
+
+// Normaliser les champs Supabase vers le format interne
+function normaliserPub(p) {
+  return {
+    ...p,
+    auteur: p.auteur_nom || p.auteur || '',
+    motsCles: p.mots_cles || [],
+    statut: p.statut || 'valide',
+    annee: p.annee || new Date(p.date_depot).getFullYear(),
+  };
+}
+
+// ── Afficher une publication individuelle ─────────────────────────────────
+async function afficherPublication(id) {
+  let p = null;
+
+  // Chercher en base Supabase en priorité
+  if (db) {
+    const { data } = await db.from('publications').select('*').eq('id', id).single();
+    if (data) {
+      p = normaliserPub(data);
+      await db.from('publications').update({ consultations: (data.consultations||0) + 1 }).eq('id', id);
+    }
+  }
+
+  // Fallback données démo uniquement si pas trouvé en base ET id <= 10
+  if (!p && id <= 10) {
+    const demo = PUBLICATIONS.find(pub => pub.id === id);
+    if (demo) p = demo;
+  }
+  if (!p) { toast("Publication introuvable", 'erreur'); return; }
+
+  const tc = { Article:'type-article', 'Thèse':'type-these', 'Mémoire':'type-memoire', Rapport:'type-rapport' };
+  const apa = `${p.auteur_nom||p.auteur} (${p.annee}). ${p.titre}. Taaka — Plateforme Nationale de Recherche Scientifique. Cotonou, Bénin. Récupéré de https://takaa.bj/publications/${p.id}`;
+  const motsCles = p.mots_cles || p.motsCles || [];
+
+  // URL PDF si stocké dans Supabase
+  let pdfUrl = null;
+  if (p.fichier_url) {
+    const { data } = db.storage.from('publications').getPublicUrl(p.fichier_url);
+    pdfUrl = data?.publicUrl;
+  }
+
+  document.getElementById('breadcrumbTitre').textContent = p.titre.substring(0,50) + (p.titre.length > 50 ? '...' : '');
+  document.getElementById('pubDetailContenu').innerHTML = `
+    <div class="pub-detail-header">
+      <span class="pub-type ${tc[p.type]||'type-article'}" style="margin-bottom:12px">${p.type}</span>
+      <h1>${p.titre}</h1>
+      <div class="pub-detail-meta">
+        <span class="meta-chip" style="cursor:pointer" onclick="afficherProfil('${p.auteur_nom||p.auteur}')">👤 ${p.auteur_nom||p.auteur} ↗</span>
+        <span class="meta-chip">🏛 ${p.institution}</span>
+        <span class="meta-chip">📅 ${p.annee}</span>
+        <span class="meta-chip">🔬 ${p.discipline}</span>
+        <span class="meta-chip">📄 ${p.pages||'—'} pages</span>
+      </div>
+      <div style="margin:1rem 0">
+        <h4 style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--texte-muted);margin-bottom:6px">Mots-clés</h4>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">${motsCles.map(m=>`<span class="mot-cle">${m}</span>`).join('')}</div>
+      </div>
+      <div style="background:var(--gris);border-radius:8px;padding:1.25rem;margin:1rem 0">
+        <h4 style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--texte-muted);margin-bottom:8px">Résumé</h4>
+        <p style="color:var(--texte);line-height:1.8;font-size:0.95rem">${p.resume}</p>
+      </div>
+      <div class="pub-detail-actions">
+        ${pdfUrl ? `<a href="${pdfUrl}" target="_blank" class="btn btn-primaire">⬇ Télécharger PDF</a>` : `<button class="btn btn-primaire" onclick="noPdf()">⬇ PDF indisponible</button>`}
+        <button class="btn btn-secondaire" onclick="navigator.clipboard.writeText(window.location.href).then(()=>toast('Lien copié ✓','succes'))">🔗 Partager</button>
+        <button class="btn btn-secondaire" onclick="document.getElementById('citBox').scrollIntoView({behavior:'smooth'})">📋 Citer</button>
+      </div>
+    </div>
+    ${pdfUrl ? `<div class="pdf-viewer" style="min-height:200px;padding:1.5rem;text-align:center">
+      <iframe src="${pdfUrl}" style="width:100%;height:600px;border:none;border-radius:8px" title="Aperçu PDF"></iframe>
+    </div>` : `<div class="pdf-viewer"><div style="font-size:3rem">📄</div><div style="font-weight:600;color:var(--texte-muted)">Aperçu non disponible</div></div>`}
+    <div class="citation-box" id="citBox">
+      <h4>📋 Citation automatique — Style APA</h4>
+      <div class="citation-texte">${apa}</div>
+      <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+        <button class="btn btn-secondaire" style="font-size:0.78rem;padding:5px 12px" onclick="navigator.clipboard.writeText(\`${apa}\`).then(()=>toast('Citation APA copiée !','succes'))">Copier APA</button>
+      </div>
+    </div>
+    <div style="background:var(--blanc);border:1px solid var(--gris-bord);border-top:3px solid var(--jaune);border-radius:var(--radius);padding:1.5rem">
+      <h3 style="font-family:var(--font-titre);color:var(--noir);font-size:1.1rem;margin-bottom:1rem">📊 Statistiques</h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px">
+        <div class="stat-card"><span class="etiquette">Consultations</span><span class="valeur" style="font-size:1.6rem">${(p.consultations||0).toLocaleString('fr')}</span></div>
+        <div class="stat-card"><span class="etiquette">Téléchargements</span><span class="valeur" style="font-size:1.6rem">${(p.telechargements||0).toLocaleString('fr')}</span></div>
+        <div class="stat-card"><span class="etiquette">Taux DL</span><span class="valeur" style="font-size:1.6rem">${p.consultations ? Math.round((p.telechargements||0)/p.consultations*100) : 0}%</span></div>
+      </div>
+    </div>`;
+  afficherPage('publication');
+}
+
+// ============================================================
+// DÉPÔT — upload réel vers Supabase
+// ============================================================
+async function soumettreDepot(e) {
+  e.preventDefault();
+  if (!utilisateurConnecte) { toast("Vous devez être connecté pour déposer", "erreur"); return; }
+
+  const titre     = document.getElementById('depotTitre').value.trim();
+  const resume    = document.getElementById('depotResume').value.trim();
+  const type      = document.getElementById('depotType').value;
+  const discipline = document.getElementById('depotDiscipline').value;
+  const motsClesRaw = document.getElementById('depotMotsCles').value;
+  const dateVal   = document.getElementById('depotDate').value;
+  const specialite = document.getElementById('depotSpecialite')?.value.trim() || '';
+  const fichier   = document.getElementById('fileInput').files[0];
+
+  const instSelect = document.getElementById('depotInstitution');
+  const instAutre  = document.getElementById('institutionAutreChamp');
+  const institution = instSelect.value === 'Autre'
+    ? (instAutre?.value.trim() || 'Autre')
+    : instSelect.value;
+
+  if (!titre || !resume || !type || !discipline || !institution || !dateVal) {
+    toast('Veuillez remplir tous les champs obligatoires', 'erreur');
+    return;
+  }
+
+  const btn = e.target.querySelector('button[type=submit]');
+  if (btn) { btn.disabled = true; btn.textContent = 'Envoi en cours…'; }
+
+  let fichier_url = null;
+
+  // Upload PDF si présent
+  if (fichier) {
+    const ext = fichier.name.split('.').pop();
+    const nomFichier = `${Date.now()}_${utilisateurConnecte.id}.${ext}`;
+    const { data: uploadData, error: uploadErr } = await db.storage
+      .from('publications')
+      .upload(`pdfs/${nomFichier}`, fichier, { contentType: 'application/pdf' });
+
+    if (uploadErr) {
+      toast("Erreur lors de l'upload du PDF : " + uploadErr.message, "erreur");
+      if (btn) { btn.disabled = false; btn.textContent = '📤 Soumettre pour validation'; }
+      return;
+    }
+    fichier_url = uploadData.path;
+  }
+
+  const motsCles = motsClesRaw.split(',').map(m => m.trim()).filter(Boolean);
+  const auteurNom = (utilisateurConnecte.prenom ? utilisateurConnecte.prenom + ' ' : '') + (utilisateurConnecte.nom_famille || utilisateurConnecte.nom || '');
+
+  const { error } = await db.from('publications').insert({
+    titre, resume, type, discipline,
+    auteur_id: utilisateurConnecte.id,
+    auteur_nom: auteurNom,
+    institution,
+    mots_cles: motsCles,
+    annee: new Date(dateVal).getFullYear(),
+    specialite: specialite || null,
+    statut: 'attente',
+    fichier_url,
+    pages: 0
+  });
+
+  if (btn) { btn.disabled = false; btn.textContent = '📤 Soumettre pour validation'; }
+
+  if (error) {
+    toast("Erreur lors du dépôt : " + error.message, "erreur");
+    return;
+  }
+
+  toast("Publication soumise avec succès ! Nos reviewers l'examineront sous 5 à 10 jours ✓", "succes");
+  e.target.reset();
+  document.getElementById('nomFichier').style.display = 'none';
+  if (instAutre) instAutre.style.display = 'none';
+  setTimeout(() => afficherPage('accueil'), 2500);
+}
+
+// ============================================================
+// ADMIN — chargement depuis Supabase
+// ============================================================
+
+// ── Statistiques dashboard depuis Supabase ────────────────────────────────
+async function chargerStatsDashboard() {
+  if (!db) return;
+  try {
+    const [pubsRes, attRes, usersRes] = await Promise.all([
+      db.from('publications').select('statut, consultations, telechargements'),
+      db.from('publications').select('id', { count: 'exact' }).eq('statut', 'attente'),
+      db.from('profils').select('id', { count: 'exact' })
+    ]);
+
+    const pubs    = pubsRes.data  || [];
+    const valides = pubs.filter(p => p.statut === 'valide');
+    const total   = pubs.length;
+    const attente = attRes.count  || 0;
+    const users   = usersRes.count || 0;
+    const totalC  = pubs.reduce((s, p) => s + (p.consultations  || 0), 0);
+    const totalDL = pubs.reduce((s, p) => s + (p.telechargements || 0), 0);
+
+    const el = id => document.getElementById(id);
+    if (el('statTotal'))          el('statTotal').textContent          = total.toLocaleString('fr');
+    if (el('statTotalTendance'))  el('statTotalTendance').textContent  = valides.length + ' publiée' + (valides.length > 1 ? 's' : '');
+    if (el('statAttente'))        el('statAttente').textContent        = attente;
+    if (el('statChercheurs'))     el('statChercheurs').textContent     = users.toLocaleString('fr');
+    if (el('statConsultations'))  el('statConsultations').textContent  = totalC >= 1000 ? (totalC/1000).toFixed(1) + ' k' : totalC.toString();
+    if (el('statTelechargements'))el('statTelechargements').textContent = totalDL >= 1000 ? (totalDL/1000).toFixed(1) + ' k' : totalDL.toString();
+  } catch(e) {
+    console.error('Erreur stats dashboard:', e);
+  }
+}
+
+async function afficherAdminTab(tab, btnEl) {
+  if (btnEl) { document.querySelectorAll('#page-dashboard .admin-tab').forEach(t => t.classList.remove('actif')); btnEl.classList.add('actif'); }
+  const c = document.getElementById('adminContenu');
+  if (!c) return;
+
+  const isAdmin = utilisateurConnecte?.role === 'admin';
+
+  if (tab === 'depots') {
+    showLoader('adminContenu');
+    const { data } = await db.from('publications').select('*').eq('statut', 'attente').order('date_depot', { ascending: false });
+    const pubs = data || [];
+    c.innerHTML = `<div style="overflow:auto"><table class="table-admin">
+      <thead><tr><th>Titre</th><th>Auteur</th><th>Type</th><th>Discipline</th><th>Date</th><th>Statut</th><th>Actions</th></tr></thead>
+      <tbody>
+        ${pubs.length === 0 ? '<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--texte-muted)">Aucun dépôt en attente</td></tr>' :
+          pubs.map(d => `<tr>
+            <td style="max-width:220px;font-weight:600;cursor:pointer;color:var(--noir)" onclick="ouvrirEvaluationPanel(${JSON.stringify(d).replace(/"/g,'&quot;')})">${d.titre.substring(0,60)}${d.titre.length>60?'…':''}</td>
+            <td class="lien-auteur" style="cursor:pointer" onclick="afficherProfil('${d.auteur_nom}')">${d.auteur_nom}</td>
+            <td><span class="pub-type ${d.type==='Article'?'type-article':d.type==='Thèse'?'type-these':d.type==='Mémoire'?'type-memoire':'type-rapport'}">${d.type}</span></td>
+            <td style="font-size:0.82rem;color:var(--texte-muted)">${d.discipline}</td>
+            <td style="white-space:nowrap;font-size:0.8rem;color:var(--texte-muted)">${new Date(d.date_depot).toLocaleDateString('fr-FR')}</td>
+            <td><span class="badge badge-attente">En attente</span></td>
+            <td style="white-space:nowrap">
+              <button class="btn btn-primaire" style="padding:4px 12px;font-size:0.78rem" onclick="ouvrirEvaluationPanel(${JSON.stringify(d).replace(/"/g,'&quot;')})">🔍 Examiner</button>
+            </td>
+          </tr>`).join('')}
+      </tbody>
+    </table></div>`;
+
+  } else if (tab === 'comptes') {
+    showLoader('adminContenu');
+    const { data } = await db.from('profils').select('*').order('date_inscription', { ascending: false });
+    const users = data || [];
+    c.innerHTML = `<div style="overflow:auto"><table class="table-admin">
+      <thead><tr><th>Nom</th><th>Email</th><th>Rôle</th><th>Institution</th><th>Inscrit le</th><th>Actions</th></tr></thead>
+      <tbody>
+        ${users.map(u => `<tr>
+          <td style="font-weight:600;cursor:pointer" class="lien-auteur" onclick="afficherProfil('${u.nom} ${u.prenom}')">${u.nom} ${u.prenom}</td>
+          <td style="font-size:0.82rem;color:var(--texte-muted)">${u.email}</td>
+          <td><span class="badge badge-${u.role==='admin'?'valide':u.role==='moderateur'?'moderateur':'attente'}">${u.role}</span></td>
+          <td style="font-size:0.85rem">${u.institution||'—'}</td>
+          <td style="font-size:0.8rem;color:var(--texte-muted)">${new Date(u.date_inscription).toLocaleDateString('fr-FR')}</td>
+          <td>${isAdmin ? `<button class="btn btn-secondaire" style="padding:4px 10px;font-size:0.78rem;color:var(--rouge);border-color:var(--rouge)" onclick="suspendreCompte('${u.id}','${u.email}')">Suspendre</button>` : '<span style="font-size:0.8rem;color:var(--texte-muted)">Lecture seule</span>'}</td>
+        </tr>`).join('')}
+      </tbody>
+    </table></div>`;
+
+  } else if (tab === 'moderateurs') {
+    showLoader('adminContenu');
+    const { data } = await db.from('profils').select('*').in('role', ['moderateur','reviewer']).order('date_inscription', { ascending: false });
+    const modos = data || [];
+    c.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;flex-wrap:wrap;gap:10px">
+        <div>
+          <p style="font-weight:700;color:var(--noir)">Modérateurs et reviewers (${modos.length})</p>
+          <p style="font-size:0.85rem;color:var(--texte-muted)">Ces comptes ont accès à la validation des soumissions.</p>
+        </div>
+        ${isAdmin ? `<button class="btn btn-primaire" onclick="ouvrirModal('modalCreerModo')">+ Créer un modérateur</button>` : ''}
+      </div>
+      <div style="overflow:auto"><table class="table-admin">
+        <thead><tr><th>Nom</th><th>Email</th><th>Rôle</th><th>Institution</th><th>Inscrit le</th><th>Actions</th></tr></thead>
+        <tbody>
+          ${modos.length === 0 ? '<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--texte-muted)">Aucun modérateur</td></tr>' :
+            modos.map(m => `<tr>
+              <td style="font-weight:600">${m.nom} ${m.prenom}</td>
+              <td style="font-size:0.82rem;color:var(--texte-muted)">${m.email}</td>
+              <td><span class="badge badge-${m.role==='moderateur'?'moderateur':'reviewer'}">${m.role}</span></td>
+              <td style="font-size:0.85rem">${m.institution||'—'}</td>
+              <td style="font-size:0.8rem;color:var(--texte-muted)">${new Date(m.date_inscription).toLocaleDateString('fr-FR')}</td>
+              <td>${isAdmin ? `<button class="btn btn-secondaire" style="padding:4px 10px;font-size:0.78rem;color:var(--rouge);border-color:var(--rouge)" onclick="revoquerModo('${m.id}','${m.nom} ${m.prenom}')">Révoquer</button>` : '<span style="font-size:0.8rem;color:var(--texte-muted)">—</span>'}</td>
+            </tr>`).join('')}
+        </tbody>
+      </table></div>`;
+
+  } else {
+    showLoader('adminContenu');
+    const { data } = await db.from('publications').select('*').eq('statut','valide').order('date_depot', { ascending: false });
+    const pubs = data || [];
+    c.innerHTML = `<div style="overflow:auto"><table class="table-admin">
+      <thead><tr><th>Titre</th><th>Auteur</th><th>Type</th><th>Année</th><th>Consultations</th><th>Actions</th></tr></thead>
+      <tbody>
+        ${pubs.map(p => `<tr>
+          <td style="max-width:240px;font-weight:600;cursor:pointer;color:var(--noir)" onclick="afficherPublication(${p.id})">${p.titre.substring(0,55)}…</td>
+          <td class="lien-auteur" style="cursor:pointer;font-size:0.85rem" onclick="afficherProfil('${p.auteur_nom}')">${p.auteur_nom}</td>
+          <td><span class="pub-type ${p.type==='Article'?'type-article':p.type==='Thèse'?'type-these':p.type==='Mémoire'?'type-memoire':'type-rapport'}">${p.type}</span></td>
+          <td>${p.annee}</td>
+          <td>${(p.consultations||0).toLocaleString('fr')}</td>
+          <td>${isAdmin ? `<button class="btn btn-secondaire" style="padding:4px 10px;font-size:0.78rem;color:var(--rouge);border-color:var(--rouge)" onclick="retirerPublication(${p.id})">Retirer</button>` : '<span style="font-size:0.8rem;color:var(--texte-muted)">—</span>'}</td>
+        </tr>`).join('')}
+      </tbody>
+    </table></div>`;
+  }
+}
+
+// ── Panneau d'évaluation ──────────────────────────────────────────────────
+function ouvrirEvaluationPanel(pub) {
+  if (typeof pub === 'string') {
+    try { pub = JSON.parse(pub); } catch(e) { return; }
+  }
+  const motsCles = (pub.mots_cles || []).join(', ');
+  const dateDepot = new Date(pub.date_depot).toLocaleDateString('fr-FR');
+
+  // Récupérer l'URL PDF
+  let pdfUrl = null;
+  if (pub.fichier_url && db) {
+    const { data } = db.storage.from('publications').getPublicUrl(pub.fichier_url);
+    pdfUrl = data?.publicUrl;
+  }
+
+  document.getElementById('evalPubId').value = pub.id;
+  document.getElementById('evalDecision').value = '';
+  document.getElementById('evalCommentaire').value = '';
+
+  document.getElementById('evalTitre').textContent = pub.titre;
+  document.getElementById('evalAuteur').textContent = pub.auteur_nom;
+  document.getElementById('evalInfos').innerHTML =
+    `<span class="meta-chip">📋 ${pub.type}</span>
+     <span class="meta-chip">🔬 ${pub.discipline}</span>
+     <span class="meta-chip">🏛 ${pub.institution}</span>
+     <span class="meta-chip">📅 ${pub.annee || dateDepot}</span>`;
+  document.getElementById('evalResume').textContent = pub.resume || 'Aucun résumé.';
+  document.getElementById('evalMotsCles').textContent = motsCles || '—';
+
+  const pdfZone = document.getElementById('evalPdfZone');
+  if (pdfUrl) {
+    pdfZone.innerHTML = `<iframe src="${pdfUrl}" style="width:100%;height:500px;border:none;border-radius:8px" title="Document soumis"></iframe>`;
+  } else {
+    pdfZone.innerHTML = '<p style="color:var(--texte-muted);padding:2rem;text-align:center">Aucun PDF joint à cette soumission.</p>';
+  }
+
+  ouvrirModal('modalEvaluation');
+}
+
+async function soumettreEvaluation() {
+  const id = document.getElementById('evalPubId').value;
+  const decision = document.getElementById('evalDecision').value;
+  const commentaire = document.getElementById('evalCommentaire').value.trim();
+
+  if (!decision) { toast('Veuillez choisir une décision', 'erreur'); return; }
+  if ((decision === 'revision_mineure' || decision === 'revision_majeure' || decision === 'rejete') && !commentaire) {
+    toast('Un commentaire est obligatoire pour cette décision', 'erreur'); return;
+  }
+
+  const statutMap = {
+    'accepte':          'valide',
+    'revision_mineure': 'revision_mineure',
+    'revision_majeure': 'revision_majeure',
+    'rejete':           'rejete'
+  };
+  const statut = statutMap[decision];
+
+  await db.from('publications').update({
+    statut,
+    commentaire_evaluation: commentaire || null,
+    date_evaluation: new Date().toISOString(),
+    evaluateur: utilisateurConnecte?.email || null
+  }).eq('id', id);
+
+  fermerModal('modalEvaluation');
+
+  // Récupérer l'email de l'auteur pour notification
+  const { data: pubData } = await db.from('publications').select('auteur_id, titre, auteur_nom').eq('id', id).single();
+  if (pubData?.auteur_id) {
+    const { data: profilData } = await db.from('profils').select('email').eq('id', pubData.auteur_id).single();
+    if (profilData?.email) {
+      await envoyerNotificationEvaluation({
+        email: profilData.email,
+        nom: pubData.auteur_nom,
+        titre: pubData.titre,
+        decision,
+        commentaire: commentaire || null
+      });
+    }
+  }
+
+  const msgs = {
+    'accepte':          'Publication acceptée et publiée ✓',
+    'revision_mineure': "Révision mineure demandée — auteur notifié par email",
+    'revision_majeure': "Révision majeure demandée — auteur notifié par email",
+    'rejete':           'Publication rejetée — auteur notifié par email'
+  };
+  const types = { 'accepte': 'succes', 'revision_mineure': '', 'revision_majeure': '', 'rejete': 'erreur' };
+  toast(msgs[decision], types[decision]);
+  afficherAdminTab('depots', null);
+}
+
+// ── Notification email via Supabase Auth (magic link) ─────────────────────
+async function envoyerNotificationEvaluation({ email, nom, titre, decision, commentaire }) {
+  const decisionsTexte = {
+    'accepte':          'acceptée et publiée',
+    'revision_mineure': 'soumise à révision mineure',
+    'revision_majeure': 'soumise à révision majeure',
+    'rejete':           'rejetée'
+  };
+  const sujet = {
+    'accepte':          'Votre publication a été acceptée — Taaka',
+    'revision_mineure': 'Révision mineure demandée pour votre publication — Taaka',
+    'revision_majeure': 'Révision majeure demandée pour votre publication — Taaka',
+    'rejete':           'Décision concernant votre soumission — Taaka'
+  };
+
+  const corps = `Bonjour ${nom},\n\nLe comité d'évaluation de la plateforme Taaka a rendu son avis concernant votre publication :\n\n"${titre}"\n\nDécision : ${(decisionsTexte[decision]||'').toUpperCase()}\n${commentaire ? '\nCommentaire du comité :\n' + commentaire + '\n' : ''}\nConnectez-vous sur la plateforme pour consulter les détails et, le cas échéant, soumettre une version révisée :\nhttps://takaa.bj\n\nCordialement,\nL'équipe Taaka — Plateforme Nationale de Recherche Scientifique du Bénin`;
+
+  // Utiliser Supabase Edge Function si disponible, sinon stocker la notif en base
+  try {
+    const { error } = await db.functions.invoke('send-email', {
+      body: { to: email, subject: sujet[decision], text: corps }
+    });
+    if (error) throw error;
+  } catch (e) {
+    // Fallback : stocker la notification dans une table pour envoi différé
+    await db.from('notifications').insert({
+      destinataire_email: email,
+      sujet: sujet[decision],
+      corps,
+      statut: 'pending',
+      created_at: new Date().toISOString()
+    }).then(() => {}).catch(() => {});
+    console.log('Email en attente (Edge Function non configurée) :', email);
+  }
+}
+
+
+// ── Actions admin ─────────────────────────────────────────────────────────
+async function validerPublication(id) {
+  await db.from('publications').update({ statut: 'valide' }).eq('id', id);
+  toast('Publication validée et publiée ✓', 'succes');
+  afficherAdminTab('depots', null);
+}
+
+async function rejeterPublication(id) {
+  await db.from('publications').update({ statut: 'rejete' }).eq('id', id);
+  toast('Publication rejetée', 'erreur');
+  afficherAdminTab('depots', null);
+}
+
+async function retirerPublication(id) {
+  if (!confirm('Retirer définitivement cette publication ?')) return;
+  await db.from('publications').update({ statut: 'rejete' }).eq('id', id);
+  toast('Publication retirée', 'erreur');
+  afficherAdminTab('publiees', null);
+}
+
+async function suspendreCompte(id, email) {
+  if (!confirm('Suspendre le compte de ' + email + ' ?')) return;
+  await db.from('profils').update({ role: 'suspendu' }).eq('id', id);
+  toast('Compte suspendu', 'erreur');
+  afficherAdminTab('comptes', null);
+}
+
+async function revoquerModo(id, nom) {
+  if (!confirm('Révoquer les droits de ' + nom + ' ?')) return;
+  await db.from('profils').update({ role: 'chercheur' }).eq('id', id);
+  toast('Droits modérateur révoqués pour ' + nom, 'erreur');
+  afficherAdminTab('moderateurs', null);
+}
+
+// ── Créer modérateur via Supabase ─────────────────────────────────────────
+async function creerModerateur() {
+  const prenom      = document.getElementById('modoPrenom').value.trim();
+  const nom         = document.getElementById('modoNom').value.trim();
+  const email       = document.getElementById('modoEmail').value.trim();
+  const role        = document.getElementById('modoRole').value;
+  const institution = document.getElementById('modoInstitution').value.trim();
+  const bio         = document.getElementById('modoBio')?.value.trim() || '';
+  const disciplinesEl = document.getElementById('modoDisciplines');
+  const disciplines = Array.from(disciplinesEl.selectedOptions).map(o => o.value);
+
+  if (!prenom || !nom || !email) { toast('Veuillez remplir les champs obligatoires', 'erreur'); return; }
+  if (disciplines.length === 0) { toast('Veuillez assigner au moins une discipline', 'erreur'); return; }
+
+  // Créer le compte auth Supabase
+  const { data, error } = await db.auth.admin?.createUser({
+    email, password: Math.random().toString(36).slice(-12) + 'A1!',
+    email_confirm: true
+  }) || { data: null, error: { message: 'API admin non disponible côté client' } };
+
+  // Fallback : inviter par email
+  const { error: invErr } = await db.auth.signInWithOtp({ email });
+
+  toast(`Invitation envoyée à ${email}. Le compte ${role} sera activé à la première connexion ✓`, "succes");
+
+  fermerModal('modalCreerModo');
+  document.getElementById('modoPrenom').value = '';
+  document.getElementById('modoNom').value = '';
+  document.getElementById('modoEmail').value = '';
+  document.getElementById('modoInstitution').value = '';
+  const modoBioEl = document.getElementById('modoBio'); if (modoBioEl) modoBioEl.value = '';
+  disciplinesEl.selectedIndex = -1;
+}
+
+// ============================================================
+// CLASSEMENT — depuis Supabase
+// ============================================================
+async function afficherClassement(type, btnEl) {
+  if (btnEl) { document.querySelectorAll('#page-classement .admin-tab').forEach(t => t.classList.remove('actif')); btnEl.classList.add('actif'); }
+  const c = document.getElementById('classementContenu');
+  if (!c) return;
+  showLoader('classementContenu');
+
+  if (type === 'auteurs') {
+    const { data } = await db.from('publications')
+      .select('auteur_nom, institution, discipline, consultations')
+      .eq('statut', 'valide');
+
+    // Agréger par auteur
+    const map = {};
+    (data||[]).forEach(p => {
+      if (!map[p.auteur_nom]) map[p.auteur_nom] = { nom: p.auteur_nom, institution: p.institution, discipline: p.discipline, pubs: 0, consultations: 0 };
+      map[p.auteur_nom].pubs++;
+      map[p.auteur_nom].consultations += p.consultations || 0;
+    });
+    const auteurs = Object.values(map).sort((a,b) => b.pubs - a.pubs).slice(0, 20);
+    const liste = auteurs.length > 0 ? auteurs : AUTEURS;
+
+    c.innerHTML = liste.map((a,i) => `
+      <div class="top-auteur" onclick="afficherProfil('${a.nom}')">
+        <div class="rang rang-${i+1}">${i+1}</div>
+        <div class="auteur-avatar">${a.nom.split(' ').map(m=>m[0]).join('').substring(0,2).toUpperCase()}</div>
+        <div class="auteur-info">
+          <div class="auteur-nom lien-auteur">${a.nom}</div>
+          <div class="auteur-inst">${a.institution} · ${a.discipline}</div>
+        </div>
+        <div class="auteur-chiffres">
+          <div class="pubs">${a.pubs}</div>
+          <div class="lab">publications</div>
+          <div style="font-size:0.75rem;color:var(--texte-muted);margin-top:2px">👁 ${a.consultations.toLocaleString('fr')}</div>
+        </div>
+      </div>`).join('');
+
+  } else if (type === 'institutions') {
+    const { data } = await db.from('publications').select('institution').eq('statut', 'valide');
+    const map = {};
+    (data||[]).forEach(p => { map[p.institution] = (map[p.institution]||0) + 1; });
+    const insts = Object.entries(map).sort((a,b)=>b[1]-a[1]).slice(0,10);
+
+    c.innerHTML = (insts.length > 0 ? insts : [["UAC",678],["UP",234],["UNA",156]]).map(([nom,pubs],i) => `
+      <div class="top-auteur">
+        <div class="rang rang-${i+1}">${i+1}</div>
+        <div class="auteur-avatar" style="border-radius:8px;background:var(--jaune-clair);color:var(--noir);font-size:0.7rem">${nom.substring(0,3).toUpperCase()}</div>
+        <div class="auteur-info"><div class="auteur-nom">${nom}</div></div>
+        <div class="auteur-chiffres"><div class="pubs">${pubs}</div><div class="lab">publications</div></div>
+      </div>`).join('');
+
+  } else {
+    const { data } = await db.from('publications').select('*').eq('statut','valide').order('consultations', { ascending: false }).limit(10);
+    const pubs = data && data.length > 0 ? data.map(normaliserPub) : [...PUBLICATIONS].sort((a,b)=>b.consultations-a.consultations);
+
+    c.innerHTML = pubs.map((p,i) => `
+      <div class="top-auteur" onclick="afficherPublication(${p.id})">
+        <div class="rang rang-${i+1}">${i+1}</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-weight:600;color:var(--texte);font-size:0.9rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.titre.substring(0,80)}…</div>
+          <div style="font-size:0.8rem;color:var(--texte-muted);margin-top:3px">
+            <span class="lien-auteur" onclick="event.stopPropagation();afficherProfil('${p.auteur_nom||p.auteur}')">${p.auteur_nom||p.auteur}</span> · ${p.annee}
+          </div>
+        </div>
+        <div class="auteur-chiffres"><div class="pubs">${(p.consultations||0).toLocaleString('fr')}</div><div class="lab">consultations</div></div>
+      </div>`).join('');
+  }
+}
+
+// ============================================================
+// PROFIL AUTEUR — depuis Supabase
+// ============================================================
+async function afficherProfil(nomAuteur) {
+  showLoader('profilContenu');
+  afficherPage('profil');
+
+  // Chercher les publications de cet auteur
+  const { data: pubsData } = await db.from('publications')
+    .select('*')
+    .eq('auteur_nom', nomAuteur)
+    .eq('statut', 'valide')
+    .order('annee', { ascending: false });
+
+  // Chercher le profil si enregistré
+  const { data: profilData } = await db.from('profils')
+    .select('*')
+    .ilike('nom', '%' + nomAuteur.split(' ')[0] + '%')
+    .limit(1);
+
+  const pubsAuteur = pubsData && pubsData.length > 0 ? pubsData.map(normaliserPub) : PUBLICATIONS.filter(p => p.auteur === nomAuteur);
+  const profil = profilData?.[0];
+  const estLeMeme = utilisateurConnecte && (utilisateurConnecte.nom === nomAuteur || utilisateurConnecte.email === profil?.email);
+
+  const totalC  = pubsAuteur.reduce((s,p) => s + (p.consultations||0), 0);
+  const totalDL = pubsAuteur.reduce((s,p) => s + (p.telechargements||0), 0);
+  const institution = profil?.institution || pubsAuteur[0]?.institution || '—';
+  const discipline  = profil?.specialite  || pubsAuteur[0]?.discipline  || '—';
+  const initiales   = nomAuteur.split(' ').map(m=>m[0]).join('').substring(0,2).toUpperCase();
+  const tc = { Article:'type-article', 'Thèse':'type-these', 'Mémoire':'type-memoire', Rapport:'type-rapport' };
+
+  document.getElementById('profilContenu').innerHTML = `
+    <div class="profil-header">
+      <div class="profil-avatar">${initiales}</div>
+      <div class="profil-info">
+        <h2>${nomAuteur}</h2>
+        <p class="profil-institution">🏛 ${institution} &nbsp;·&nbsp; 🔬 ${discipline}</p>
+        ${(profil?.bio) ? `<p style="font-size:0.9rem;color:rgba(255,255,255,0.75);line-height:1.7;margin-top:0.75rem;max-width:600px;font-style:italic">"${profil.bio}"</p>` : ''}
+        <div class="profil-stats">
+          <div class="profil-stat"><div class="val">${pubsAuteur.length}</div><div class="lab">publications</div></div>
+          <div class="profil-stat"><div class="val">${totalC.toLocaleString('fr')}</div><div class="lab">consultations</div></div>
+          <div class="profil-stat"><div class="val">${totalDL.toLocaleString('fr')}</div><div class="lab">téléchargements</div></div>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;flex-wrap:wrap;gap:10px">
+      <h3 style="font-family:var(--font-titre);font-size:1.2rem;color:var(--noir)">📚 Publications (${pubsAuteur.length})</h3>
+      ${estLeMeme ? `<button class="btn btn-primaire" onclick="telechargerFicheAuteur('${nomAuteur}')">📥 Télécharger ma fiche PDF</button>` : ''}
+    </div>
+    <div class="liste-resultats" style="gap:12px">
+      ${pubsAuteur.length === 0
+        ? '<p style="color:var(--texte-muted);font-style:italic">Aucune publication enregistrée.</p>'
+        : pubsAuteur.map(p => `
+          <div class="resultat-item" onclick="afficherPublication(${p.id})" style="margin-bottom:0">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;margin-bottom:8px;flex-wrap:wrap">
+              <span class="pub-type ${tc[p.type]||'type-article'}">${p.type}</span>
+              <span style="font-size:0.8rem;color:var(--texte-muted)">${p.annee}</span>
+            </div>
+            <div class="pub-titre" style="margin-bottom:6px">${p.titre}</div>
+            <div style="font-size:0.78rem;color:var(--texte-muted)">${p.discipline} · 👁 ${(p.consultations||0).toLocaleString('fr')} · ⬇ ${(p.telechargements||0).toLocaleString('fr')}</div>
+          </div>`).join('')}
+    </div>`;
+}
+
+
+// ===== AFFICHER CHAMP COMMENTAIRE =====
+function afficherChampCommentaire(decision) {
+  const oblig = document.getElementById('commentaireOblig');
+  if (oblig) oblig.style.display = (decision && decision !== 'accepte') ? 'inline' : 'none';
+}
+
+// ===== MON PROFIL — espace personnel =====
+async function afficherMonProfil() {
+  if (!utilisateurConnecte) { ouvrirModal('modalConnexion'); return; }
+  afficherPage('monprofil');
+
+  const initiales = utilisateurConnecte.nom.split(' ').map(m=>m[0]).join('').substring(0,2).toUpperCase();
+  document.getElementById('monProfilHeader').innerHTML = `
+    <div class="profil-header" style="margin-bottom:0">
+      <div class="profil-avatar">${initiales}</div>
+      <div class="profil-info">
+        <h2>${utilisateurConnecte.nom}</h2>
+        <p class="profil-institution">🏛 ${utilisateurConnecte.institution||'—'} &nbsp;·&nbsp; 🔬 ${utilisateurConnecte.specialite||'—'}</p>
+        ${utilisateurConnecte.bio ? `<p style="font-size:0.9rem;color:rgba(255,255,255,0.75);line-height:1.7;margin-top:0.75rem;max-width:600px;font-style:italic">"${utilisateurConnecte.bio}"</p>` : ''}
+        <div class="profil-stats" style="margin-top:1rem">
+          <div class="profil-stat"><div class="val" id="statPubActives">…</div><div class="lab">publiées</div></div>
+          <div class="profil-stat"><div class="val" id="statPubAttente">…</div><div class="lab">en attente</div></div>
+          <div class="profil-stat"><div class="val" id="statPubRevision">…</div><div class="lab">à réviser</div></div>
+        </div>
+      </div>
+    </div>`;
+
+  afficherMesPublications('actives', document.querySelector('#monProfilTabs .admin-tab'));
+}
+
+async function afficherMesPublications(filtre, btnEl) {
+  if (btnEl) {
+    document.querySelectorAll('#monProfilTabs .admin-tab').forEach(t => t.classList.remove('actif'));
+    btnEl.classList.add('actif');
+  }
+  const c = document.getElementById('mesPublicationsContenu');
+  if (!c) return;
+  c.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--texte-muted)">⏳ Chargement…</div>';
+
+  const statutsMap = {
+    'actives':  ['valide'],
+    'attente':  ['attente'],
+    'revision': ['revision_mineure','revision_majeure'],
+    'rejete':   ['rejete']
+  };
+
+  // S'assurer qu'on a l'UUID Supabase Auth (pas seulement l'objet profil)
+  let auteurId = utilisateurConnecte.id;
+  if (!auteurId) {
+    const { data: authData } = await db.auth.getUser();
+    auteurId = authData?.user?.id;
+  }
+  if (!auteurId) {
+    c.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--texte-muted)">Impossible de récupérer votre identifiant. Reconnectez-vous.</div>';
+    return;
+  }
+
+  const { data, error: pubErr } = await db.from('publications')
+    .select('*')
+    .eq('auteur_id', auteurId)
+    .in('statut', statutsMap[filtre])
+    .order('date_depot', { ascending: false });
+
+  const cptQuery = await db.from('publications').select('statut').eq('auteur_id', auteurId);
+  if (cptQuery.data) {
+    const d = cptQuery.data;
+    const el = (id) => document.getElementById(id);
+    if (el('statPubActives'))  el('statPubActives').textContent  = d.filter(p=>p.statut==='valide').length;
+    if (el('statPubAttente'))  el('statPubAttente').textContent  = d.filter(p=>p.statut==='attente').length;
+    if (el('statPubRevision')) el('statPubRevision').textContent = d.filter(p=>['revision_mineure','revision_majeure'].includes(p.statut)).length;
+  }
+
+  if (!data || data.length === 0) {
+    const msgs = {
+      'actives':  'Aucune publication publiée pour le moment.',
+      'attente':  "Aucune soumission en attente d'évaluation.",
+      'revision': 'Aucune publication en attente de révision.',
+      'rejete':   'Aucune publication rejetée.'
+    };
+    c.innerHTML = `<div style="text-align:center;padding:3rem;color:var(--texte-muted)"><p>${msgs[filtre]}</p></div>`;
+    return;
+  }
+
+  const tc = { Article:'type-article', 'Thèse':'type-these', 'Mémoire':'type-memoire', Rapport:'type-rapport' };
+  const badgeStatut = {
+    'valide':           '<span class="badge badge-valide">Publiée</span>',
+    'attente':          '<span class="badge badge-attente">En attente</span>',
+    'revision_mineure': '<span class="badge" style="background:#fff3e0;color:#c45e00">Révision mineure</span>',
+    'revision_majeure': '<span class="badge" style="background:#fce8e6;color:#b03020">Révision majeure</span>',
+    'rejete':           '<span class="badge badge-rejete">Rejetée</span>'
+  };
+
+  c.innerHTML = data.map(p => `
+    <div style="background:var(--blanc);border:1px solid var(--gris-bord);border-radius:var(--radius);padding:1.5rem;margin-bottom:1rem;${['revision_mineure','revision_majeure'].includes(p.statut)?'border-left:4px solid var(--jaune)':p.statut==='rejete'?'border-left:4px solid var(--rouge)':''}">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;flex-wrap:wrap;margin-bottom:10px">
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <span class="pub-type ${tc[p.type]||'type-article'}">${p.type}</span>
+          ${badgeStatut[p.statut]||''}
+        </div>
+        <span style="font-size:0.8rem;color:var(--texte-muted)">${new Date(p.date_depot).toLocaleDateString('fr-FR')}</span>
+      </div>
+      <div class="pub-titre" style="margin-bottom:8px;cursor:pointer" onclick="afficherPublication(${p.id})">${p.titre}</div>
+      <div style="font-size:0.82rem;color:var(--texte-muted);margin-bottom:${p.commentaire_evaluation?'12px':'0'}">🔬 ${p.discipline} · 📅 ${p.annee||'—'}</div>
+      ${p.commentaire_evaluation ? `
+        <div style="background:${p.statut==='rejete'?'#fce8e6':p.statut==='valide'?'#e6f4ea':'var(--jaune-clair)'};border-radius:8px;padding:1rem;margin-top:10px;border-left:3px solid ${p.statut==='rejete'?'var(--rouge)':p.statut==='valide'?'#137333':'var(--jaune)'}">
+          <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--texte-muted);margin-bottom:6px">💬 Avis du comité</div>
+          <p style="font-size:0.88rem;color:var(--texte);line-height:1.7">${p.commentaire_evaluation}</p>
+          ${p.date_evaluation ? `<div style="font-size:0.75rem;color:var(--texte-muted);margin-top:6px">Évalué le ${new Date(p.date_evaluation).toLocaleDateString('fr-FR')}</div>` : ''}
+        </div>` : ''}
+      ${['revision_mineure','revision_majeure'].includes(p.statut) ? `
+        <div style="margin-top:12px">
+          <button class="btn btn-primaire" style="font-size:0.85rem" onclick="ouvrirNouvellesoumission(${p.id})">📤 Soumettre une version révisée</button>
+        </div>` : ''}
+    </div>`).join('');
+}
+
+async function ouvrirNouvellesoumission(pubId) {
+  const { data } = await db.from('publications').select('*').eq('id', pubId).single();
+  if (!data) return;
+  afficherPage('depot');
+  setTimeout(() => {
+    const el = (id, val) => { const e = document.getElementById(id); if (e) e.value = val||''; };
+    el('depotTitre',      data.titre);
+    el('depotResume',     data.resume);
+    el('depotType',       data.type);
+    el('depotDiscipline', data.discipline);
+    el('depotMotsCles',   (data.mots_cles||[]).join(', '));
+    if (data.annee) el('depotDate', data.annee + '-01-01');
+    window._revisionDePubId = pubId;
+    toast('Formulaire pré-rempli. Apportez vos corrections puis soumettez.', 'succes');
+  }, 300);
+}
+
+// Init — démarré par le callback onload du SDK ci-dessous
+// (voir le script SDK avant </body>)
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" onload="initSupabase(); restaurerSession().then(() => chargerPubsAccueil());" onerror="console.error('SDK Supabase non chargé'); chargerPubsAccueil();"></script>
+</body>
+</html>
